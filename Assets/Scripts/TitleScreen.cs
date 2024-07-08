@@ -1,20 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class TitleScreen : BootSequence
+public class TitleScreen : MonoBehaviour
 {
-    private string username = (System.Environment.UserName);
-    public TMP_Text welcomeMessage;
-
+    public AudioClip BGM1;
+    private AudioSource audioSource;
 
     private void Start()
     {
-        if (loadComplete == true)
-        {
-            welcomeMessage.text = "Welcome Back";
-        }
+        audioSource = GetComponent<AudioSource>();
     }
 }

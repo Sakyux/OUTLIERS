@@ -122,15 +122,13 @@ public class BootSequence : MonoBehaviour
                 displayText.text += "\n\n" + "Booting Sequence Complete.";
                 loadingSFX.clip = audio2;
                 yield return new WaitForSeconds(2f);
-                displayText.ClearMesh();
 
-                GameObject.Find("Logo").SetActive(false);
                 loadingSFX.Play();
             }
         }
 
         loadComplete = true;
-        SceneManager.LoadScene("TitleScreen");
+        SceneManager.LoadScene("WelcomeScreen");
     }
 }
 
