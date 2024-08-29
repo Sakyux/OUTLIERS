@@ -302,7 +302,7 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: b15acfc54d098a341b5cc07163bc4bc4, type: 3}
     - target: {fileID: 8245436350657784139, guid: 8cc12c1593c51314396e63e2cc9a22fd, type: 3}
       propertyPath: firstBoot
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8245436350657784139, guid: 8cc12c1593c51314396e63e2cc9a22fd, type: 3}
       propertyPath: startUpSFX

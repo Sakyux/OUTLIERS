@@ -20,7 +20,8 @@ public class BackgroundSway : MonoBehaviour
 
         float x = amplitude * Mathf.Tan(frequency * time);
         float y = amplitude * Mathf.Tan(frequency * time);
+        float z = initialPosition.z;
 
-        transform.position = initialPosition + new Vector3(x, y, transform.position.z);
+        transform.position = initialPosition + new Vector3(x, y, z);
     }
 }
