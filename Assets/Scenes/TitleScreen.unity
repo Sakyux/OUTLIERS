@@ -155,7 +155,7 @@ RectTransform:
   m_Father: {fileID: 917977915}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -230,7 +230,7 @@ RectTransform:
   m_Father: {fileID: 1375190806}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -404,7 +404,7 @@ GameObject:
   - component: {fileID: 361889067}
   m_Layer: 5
   m_Name: Back (txt)
-  m_TagString: Untagged
+  m_TagString: SFX
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -559,7 +559,7 @@ AudioSource:
   m_GameObject: {fileID: 361889059}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -116760693324731449, guid: 817300926d6449347ac0f95c1ccfbd29, type: 2}
   m_audioClip: {fileID: 8300000, guid: a8458412bfc948345b110eaae774731f, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.6
@@ -655,7 +655,7 @@ AudioSource:
   m_GameObject: {fileID: 361889059}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -116760693324731449, guid: 817300926d6449347ac0f95c1ccfbd29, type: 2}
   m_audioClip: {fileID: 8300000, guid: d76d0f5488ea0e641b602eb533ba713d, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.6
@@ -767,9 +767,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClickSFX: {fileID: 361889065}
-  masterVolume: 1
-  sfxVolume: 1
-  musicVolume: 1
+  audioMixer: {fileID: 24100000, guid: 817300926d6449347ac0f95c1ccfbd29, type: 2}
 --- !u!114 &361889068
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1329,8 +1327,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1059552711}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1389,7 +1387,7 @@ GameObject:
   - component: {fileID: 795817385}
   m_Layer: 5
   m_Name: Music Slider
-  m_TagString: Untagged
+  m_TagString: SFX
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1460,8 +1458,8 @@ MonoBehaviour:
   m_FillRect: {fileID: 858191599}
   m_HandleRect: {fileID: 1023619800}
   m_Direction: 0
-  m_MinValue: 0
-  m_MaxValue: 1
+  m_MinValue: -80
+  m_MaxValue: 0
   m_WholeNumbers: 0
   m_Value: 0
   m_OnValueChanged:
@@ -1479,6 +1477,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 795817383}
+        m_TargetAssemblyTypeName: SettingsBehavior, Assembly-CSharp
+        m_MethodName: SetMusicVolume
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!82 &795817382
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1488,7 +1498,7 @@ AudioSource:
   m_GameObject: {fileID: 795817379}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -116760693324731449, guid: 817300926d6449347ac0f95c1ccfbd29, type: 2}
   m_audioClip: {fileID: 8300000, guid: a8458412bfc948345b110eaae774731f, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.6
@@ -1588,9 +1598,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClickSFX: {fileID: 795817384}
-  masterVolume: 1
-  sfxVolume: 1
-  musicVolume: 1
+  audioMixer: {fileID: 24100000, guid: 817300926d6449347ac0f95c1ccfbd29, type: 2}
 --- !u!82 &795817384
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1600,7 +1608,7 @@ AudioSource:
   m_GameObject: {fileID: 795817379}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -116760693324731449, guid: 817300926d6449347ac0f95c1ccfbd29, type: 2}
   m_audioClip: {fileID: 8300000, guid: 1780719a43e82ae498db94c4b6ce18c7, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.6
@@ -1745,7 +1753,7 @@ GameObject:
   - component: {fileID: 797176046}
   m_Layer: 5
   m_Name: SFX Slider
-  m_TagString: Untagged
+  m_TagString: SFX
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1816,8 +1824,8 @@ MonoBehaviour:
   m_FillRect: {fileID: 123945080}
   m_HandleRect: {fileID: 737814311}
   m_Direction: 0
-  m_MinValue: 0
-  m_MaxValue: 1
+  m_MinValue: -80
+  m_MaxValue: 0
   m_WholeNumbers: 0
   m_Value: 0
   m_OnValueChanged:
@@ -1835,6 +1843,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 797176045}
+        m_TargetAssemblyTypeName: SettingsBehavior, Assembly-CSharp
+        m_MethodName: SetSfxVolume
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!82 &797176043
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1844,7 +1864,7 @@ AudioSource:
   m_GameObject: {fileID: 797176040}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -116760693324731449, guid: 817300926d6449347ac0f95c1ccfbd29, type: 2}
   m_audioClip: {fileID: 8300000, guid: a8458412bfc948345b110eaae774731f, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.6
@@ -1940,7 +1960,7 @@ AudioSource:
   m_GameObject: {fileID: 797176040}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -116760693324731449, guid: 817300926d6449347ac0f95c1ccfbd29, type: 2}
   m_audioClip: {fileID: 8300000, guid: 1780719a43e82ae498db94c4b6ce18c7, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.6
@@ -2040,9 +2060,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClickSFX: {fileID: 797176044}
-  masterVolume: 1
-  sfxVolume: 1
-  musicVolume: 1
+  audioMixer: {fileID: 24100000, guid: 817300926d6449347ac0f95c1ccfbd29, type: 2}
 --- !u!114 &797176046
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2097,6 +2115,7 @@ GameObject:
   - component: {fileID: 835594127}
   - component: {fileID: 835594126}
   - component: {fileID: 835594130}
+  - component: {fileID: 835594131}
   m_Layer: 5
   m_Name: SETTINGS
   m_TagString: Untagged
@@ -2207,6 +2226,20 @@ MonoBehaviour:
   minScale: 0.13
   maxScale: 0.135
   speed: 1
+--- !u!114 &835594131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 835594125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f66577af380bd242abea7c8953985b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ClickSFX: {fileID: 0}
+  audioMixer: {fileID: 24100000, guid: 817300926d6449347ac0f95c1ccfbd29, type: 2}
 --- !u!1 &847150487
 GameObject:
   m_ObjectHideFlags: 0
@@ -2239,8 +2272,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1578984411}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2395,7 +2428,7 @@ RectTransform:
   m_Father: {fileID: 2126339722}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2505,8 +2538,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1742888584}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2726,7 +2759,7 @@ GameObject:
   - component: {fileID: 1112720433}
   m_Layer: 5
   m_Name: Master Slider
-  m_TagString: Untagged
+  m_TagString: SFX
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2797,8 +2830,8 @@ MonoBehaviour:
   m_FillRect: {fileID: 100896675}
   m_HandleRect: {fileID: 847150488}
   m_Direction: 0
-  m_MinValue: 0
-  m_MaxValue: 1
+  m_MinValue: -80
+  m_MaxValue: 0
   m_WholeNumbers: 0
   m_Value: 0
   m_OnValueChanged:
@@ -2813,6 +2846,18 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1112720434}
+        m_TargetAssemblyTypeName: SettingsBehavior, Assembly-CSharp
+        m_MethodName: SetMasterVolume
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 100
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
@@ -2866,7 +2911,7 @@ AudioSource:
   m_GameObject: {fileID: 1112720427}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -116760693324731449, guid: 817300926d6449347ac0f95c1ccfbd29, type: 2}
   m_audioClip: {fileID: 8300000, guid: 1780719a43e82ae498db94c4b6ce18c7, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.6
@@ -2966,9 +3011,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClickSFX: {fileID: 1112720433}
-  masterVolume: 1
-  sfxVolume: 1
-  musicVolume: 1
+  audioMixer: {fileID: 24100000, guid: 817300926d6449347ac0f95c1ccfbd29, type: 2}
 --- !u!82 &1112720435
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2978,7 +3021,7 @@ AudioSource:
   m_GameObject: {fileID: 1112720427}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -116760693324731449, guid: 817300926d6449347ac0f95c1ccfbd29, type: 2}
   m_audioClip: {fileID: 8300000, guid: a8458412bfc948345b110eaae774731f, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.6
@@ -3475,7 +3518,7 @@ GameObject:
   - component: {fileID: 1624612995}
   m_Layer: 5
   m_Name: Reset In-Game Progress (txt)
-  m_TagString: Untagged
+  m_TagString: SFX
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3606,7 +3649,7 @@ AudioSource:
   m_GameObject: {fileID: 1624612987}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -116760693324731449, guid: 817300926d6449347ac0f95c1ccfbd29, type: 2}
   m_audioClip: {fileID: 8300000, guid: a8458412bfc948345b110eaae774731f, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.6
@@ -3702,10 +3745,10 @@ AudioSource:
   m_GameObject: {fileID: 1624612987}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -116760693324731449, guid: 817300926d6449347ac0f95c1ccfbd29, type: 2}
   m_audioClip: {fileID: 8300000, guid: d76d0f5488ea0e641b602eb533ba713d, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.6
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -3814,9 +3857,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClickSFX: {fileID: 1624612993}
-  masterVolume: 1
-  sfxVolume: 1
-  musicVolume: 1
+  audioMixer: {fileID: 24100000, guid: 817300926d6449347ac0f95c1ccfbd29, type: 2}
 --- !u!114 &1624612996
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3860,7 +3901,7 @@ GameObject:
   - component: {fileID: 1682926836}
   m_Layer: 0
   m_Name: BGMusic
-  m_TagString: Untagged
+  m_TagString: Music
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3874,7 +3915,7 @@ AudioSource:
   m_GameObject: {fileID: 1682926833}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -3251737541959038225, guid: 817300926d6449347ac0f95c1ccfbd29, type: 2}
   m_audioClip: {fileID: 8300000, guid: 79150944a51dce8438c7563c6ec6f027, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.253
@@ -4898,7 +4939,7 @@ GameObject:
   - component: {fileID: 3824650677080861346}
   m_Layer: 5
   m_Name: Quit Game
-  m_TagString: Untagged
+  m_TagString: SFX
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5776,7 +5817,7 @@ AudioSource:
   m_GameObject: {fileID: 650618856279954398}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -116760693324731449, guid: 817300926d6449347ac0f95c1ccfbd29, type: 2}
   m_audioClip: {fileID: 8300000, guid: a8458412bfc948345b110eaae774731f, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.6
@@ -5904,7 +5945,7 @@ AudioSource:
   m_GameObject: {fileID: 3984123986854146537}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -116760693324731449, guid: 817300926d6449347ac0f95c1ccfbd29, type: 2}
   m_audioClip: {fileID: 8300000, guid: a8458412bfc948345b110eaae774731f, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.6
@@ -6401,7 +6442,7 @@ GameObject:
   - component: {fileID: 9027988956949205175}
   m_Layer: 5
   m_Name: Settings
-  m_TagString: Untagged
+  m_TagString: SFX
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7034,10 +7075,10 @@ AudioSource:
   m_GameObject: {fileID: 650618856279954398}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -116760693324731449, guid: 817300926d6449347ac0f95c1ccfbd29, type: 2}
   m_audioClip: {fileID: 8300000, guid: d76d0f5488ea0e641b602eb533ba713d, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.6
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -7235,7 +7276,7 @@ GameObject:
   - component: {fileID: 4803081667502587089}
   m_Layer: 5
   m_Name: Start Game
-  m_TagString: Untagged
+  m_TagString: SFX
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7967,7 +8008,7 @@ AudioSource:
   m_GameObject: {fileID: 3984123986854146537}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -116760693324731449, guid: 817300926d6449347ac0f95c1ccfbd29, type: 2}
   m_audioClip: {fileID: 8300000, guid: cad63eb518b257546a96c6a1f1dfbae0, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.6
@@ -9056,7 +9097,7 @@ AudioSource:
   m_GameObject: {fileID: 2650532977812576189}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -116760693324731449, guid: 817300926d6449347ac0f95c1ccfbd29, type: 2}
   m_audioClip: {fileID: 8300000, guid: a8458412bfc948345b110eaae774731f, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.6
@@ -10482,8 +10523,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32efac5d1807a144c92b6595cdc57e58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minScale: 0.95
-  maxScale: 1
+  minScale: 0.9
+  maxScale: 0.95
   speed: 1
 --- !u!1 &8707284673209006527
 GameObject:
@@ -10783,7 +10824,7 @@ AudioSource:
   m_GameObject: {fileID: 2650532977812576189}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -116760693324731449, guid: 817300926d6449347ac0f95c1ccfbd29, type: 2}
   m_audioClip: {fileID: 8300000, guid: d76d0f5488ea0e641b602eb533ba713d, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.6
