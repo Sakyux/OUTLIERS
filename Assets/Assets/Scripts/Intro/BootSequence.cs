@@ -22,6 +22,7 @@ public class BootSequence : MonoBehaviour
     public GameObject WarningImage;
     public Image CreditsImage;
     public TextMeshProUGUI CreditsText;
+    public TextMeshProUGUI UserText;
 
     public float letterDelay = 0.05f;
     public float sentenceDelay = 1f;
@@ -220,6 +221,7 @@ public class BootSequence : MonoBehaviour
         startUpSFX.clip = BGNoise2;
         startUpSFX.volume = 0.3f;
         startUpSFX.Play();
+
         while (timeElapsed < fadeDuration)
         {
             timeElapsed += Time.deltaTime; 
@@ -227,9 +229,12 @@ public class BootSequence : MonoBehaviour
             
             float ImageAlpha = Mathf.Lerp(0, targetAlpha, t);
             Color ImageColor = new Color(CreditsImage.color.r, CreditsImage.color.g, CreditsImage.color.b, ImageAlpha);
+            Color UserTextColor = new Color(UserText.color.r, UserText.color.g, UserText.color.b, ImageAlpha);
 
             CreditsImage.color = ImageColor; 
             CreditsText.color = ImageColor;
+            UserText.color = UserTextColor;
+
             yield return null;
         } 
 
@@ -243,8 +248,11 @@ public class BootSequence : MonoBehaviour
 
             float ImageAlpha = Mathf.Lerp(1, 0, t);
             Color ImageColor = new Color(CreditsImage.color.r, CreditsImage.color.g, CreditsImage.color.b, ImageAlpha);
+            Color UserTextColor = new Color(UserText.color.r, UserText.color.g, UserText.color.b, ImageAlpha);
 
             CreditsText.color = ImageColor;
+            UserText.color = UserTextColor;
+
             yield return null;
         }
 
