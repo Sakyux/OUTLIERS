@@ -11,6 +11,28 @@ public class SettingsBehavior : MonoBehaviour
 
     public AudioMixer audioMixer;
 
+    private void Start()
+    {
+        audioMixer.GetFloat("Master Volume", out float masterVolume);
+        audioMixer.GetFloat("SFX Volume", out float sfxVolume);
+        audioMixer.GetFloat("Music Volume", out float musicVolume);
+
+        if (masterVolume <= -30)
+        {
+            audioMixer.SetFloat("Master Volume", -80);
+        }
+
+        if (sfxVolume <= -30)
+        {
+            audioMixer.SetFloat("SFX Volume", -80);
+        }
+
+        if (musicVolume <= -30)
+        {
+            audioMixer.SetFloat("Music Volume", -80);
+        }
+    }
+
     public void PlayClickSFX()
     {
         ClickSFX.Play();
@@ -18,16 +40,28 @@ public class SettingsBehavior : MonoBehaviour
 
     public void SetMasterVolume(float masterVolume)
     {
-        audioMixer.SetFloat("Master Volume", masterVolume);
+        if (masterVolume <= -30)
+        {
+            audioMixer.SetFloat("Master Volume", -80);
+        } 
+        else audioMixer.SetFloat("Master Volume", masterVolume);
     }
 
     public void SetSfxVolume(float sfxVolume)
     {
-        audioMixer.SetFloat("SFX Volume", sfxVolume);
+        if (sfxVolume <= -30)
+        {
+            audioMixer.SetFloat("SFX Volume", -80);
+        }
+        else audioMixer.SetFloat("SFX Volume", sfxVolume);
     }
 
     public void SetMusicVolume(float musicVolume)
     {
-        audioMixer.SetFloat("Music Volume", musicVolume);
+        if (musicVolume <= -30)
+        {
+            audioMixer.SetFloat("Music Volume", -80);
+        }
+        else audioMixer.SetFloat("Music Volume", musicVolume);
     }
 }
