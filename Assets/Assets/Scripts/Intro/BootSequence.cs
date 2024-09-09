@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
 using System.Text;
 using TMPro;
 using Unity.VisualScripting;
@@ -39,12 +41,27 @@ public class BootSequence : MonoBehaviour
     private AudioSource BGAudio;
     public float fadeTime = 2.0f;
 
+    private const string FirstBootPath = "Assets/Config/FirstBoot.txt";
     public bool firstBoot = true;
 
 
     private void Start()
     {
-        Icons.SetActive(false);
+        if (File.Exists(FirstBootPath))
+        {
+            string firstBootText = File.ReadAllText(FirstBootPath);
+
+            if (firstBootText.Equals("TRUE"))
+            {
+                firstBoot = true;
+            }
+            else if (firstBootText.Equals("FALSE"))
+            {
+                firstBoot = false;
+            }
+        }
+
+            Icons.SetActive(false);
         WarningImage.SetActive(false);
 
         StartCoroutine(LoadingUI());
@@ -117,14 +134,13 @@ public class BootSequence : MonoBehaviour
         displayText.text += "System Memory : " + SystemInfo.systemMemorySize + "MB" + "\n";
         yield return new WaitForSeconds(pauseDelay);
 
-
-        displayText.text += "Graphics Device : " + SystemInfo.graphicsDeviceName + "\n";
-        yield return new WaitForSeconds(pauseDelay);
-
         displayText.text += "VRAM : " + SystemInfo.graphicsMemorySize + "MB" + "\n\n\n";
         yield return new WaitForSeconds(0.3f);
 
         displayText.text += "Loading OS : " + SystemInfo.operatingSystem + "\n";
+
+        displayText.text += "IP Address Located: " + GetLocalIPAddress() + "..... Information uploaded.\n";
+
         displayText.text += "\t";
 
         loadingSFX.Pause();
@@ -203,6 +219,7 @@ public class BootSequence : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
         firstBoot = false;
+        File.WriteAllText(FirstBootPath, "FALSE");
         SceneManager.LoadScene("TitleScreen");
     }
 
@@ -278,7 +295,7 @@ public class BootSequence : MonoBehaviour
     {
         if (firstBoot == true)
         {
-            yield return new WaitForSeconds(35f);
+            yield return new WaitForSeconds(37f);
             StartCoroutine(FadeOutAudio(BGAudio, fadeTime));
         }
         else if (firstBoot == false)
@@ -286,6 +303,21 @@ public class BootSequence : MonoBehaviour
             yield return new WaitForSeconds(15f);
             StartCoroutine(FadeOutAudio(BGAudio, fadeTime));
         }
+    }
+
+    private string GetLocalIPAddress()
+    {
+        string localIP = "";
+        var host = Dns.GetHostEntry(Dns.GetHostName());
+        foreach (var ip in host.AddressList)
+        {
+            if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+            {
+                localIP = ip.ToString();
+                break;
+            }
+        }
+        return localIP;
     }
 }
 
