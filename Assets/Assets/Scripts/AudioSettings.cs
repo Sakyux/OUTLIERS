@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class AudioSettings : MonoBehaviour
 {
-    private const string audioFilePath = "Assets/Config/AudioConfig.txt";
     public AudioMixer audioMixer;
 
     public Slider masterVolumeSlider;
@@ -17,6 +16,7 @@ public class AudioSettings : MonoBehaviour
     private void Start()
     {
         LoadAudioConfig();
+        SetMinimumVolume();
 
         masterVolumeSlider.onValueChanged.AddListener(SaveAudioConfig);
         sfxVolumeSlider.onValueChanged.AddListener(SaveAudioConfig);
@@ -25,6 +25,8 @@ public class AudioSettings : MonoBehaviour
 
     private void LoadAudioConfig()
     {
+        string audioFilePath = Application.dataPath + "/AudioConfig.txt";
+
         if (File.Exists(audioFilePath))
         {
             string settingsText = File.ReadAllText(audioFilePath);
@@ -47,7 +49,31 @@ public class AudioSettings : MonoBehaviour
 
     public void SaveAudioConfig(float value)
     {
+        string audioFilePath = Application.dataPath + "/AudioConfig.txt";
+
         string settingsText = $"Master Volume: {masterVolumeSlider.value}\nSFX Volume: {sfxVolumeSlider.value}\nMusic Volume: {musicVolumeSlider.value}";
         File.WriteAllText(audioFilePath, settingsText);
+    }
+
+    private void SetMinimumVolume()
+    {
+        audioMixer.GetFloat("Master Volume", out float masterVolume);
+        audioMixer.GetFloat("SFX Volume", out float sfxVolume);
+        audioMixer.GetFloat("Music Volume", out float musicVolume);
+
+        if (masterVolume <= -30f)
+        {
+            audioMixer.SetFloat("Master Volume", -80f);
+        }
+
+        if (sfxVolume <= -30f)
+        {
+            audioMixer.SetFloat("SFX Volume", -80f);
+        }
+
+        if (musicVolume <= -30f)
+        {
+            audioMixer.SetFloat("Music Volume", -80f);
+        }
     }
 }

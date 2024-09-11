@@ -41,12 +41,12 @@ public class BootSequence : MonoBehaviour
     private AudioSource BGAudio;
     public float fadeTime = 2.0f;
 
-    private const string FirstBootPath = "Assets/Config/FirstBoot.txt";
+    
     public bool firstBoot = true;
-
 
     private void Start()
     {
+        string FirstBootPath = Application.dataPath + "/FirstBoot.txt";
         if (File.Exists(FirstBootPath))
         {
             string firstBootText = File.ReadAllText(FirstBootPath);
@@ -61,11 +61,11 @@ public class BootSequence : MonoBehaviour
             }
         }
 
-            Icons.SetActive(false);
+        Icons.SetActive(false);
         WarningImage.SetActive(false);
 
         StartCoroutine(LoadingUI());
-        if (firstBoot == true) StartCoroutine(FirstStartUp()); // Performs action over time
+        if (firstBoot == true) StartCoroutine(FirstStartUp());
         else StartCoroutine(SplashScreen());
     }
 
@@ -167,9 +167,9 @@ public class BootSequence : MonoBehaviour
             if (j == 4)
             {
                 displayText.text += "\n\n" + "Booting Sequence Complete.";
-                beepSFX.clip = audio2;
                 yield return new WaitForSeconds(2f);
-
+                
+                beepSFX.clip = audio2;
                 beepSFX.Play();
             }
         }
@@ -196,9 +196,12 @@ public class BootSequence : MonoBehaviour
 
             float ImageAlpha = Mathf.Lerp(0, targetAlpha, t);
             Color ImageColor = new Color(CreditsImage.color.r, CreditsImage.color.g, CreditsImage.color.b, ImageAlpha);
+            Color UserTextColor = new Color(UserText.color.r, UserText.color.g, UserText.color.b, ImageAlpha);
 
             CreditsImage.color = ImageColor;
             CreditsText.color = ImageColor;
+            UserText.color = UserTextColor;
+
             yield return null;
         }
 
@@ -212,14 +215,14 @@ public class BootSequence : MonoBehaviour
 
             float ImageAlpha = Mathf.Lerp(1, 0, t);
             Color ImageColor = new Color(CreditsImage.color.r, CreditsImage.color.g, CreditsImage.color.b, ImageAlpha);
+            Color UserTextColor = new Color(UserText.color.r, UserText.color.g, UserText.color.b, ImageAlpha);
 
             CreditsText.color = ImageColor;
+            UserText.color = UserTextColor;
             yield return null;
         }
 
-        yield return new WaitForSeconds(1f);
         firstBoot = false;
-        File.WriteAllText(FirstBootPath, "FALSE");
         SceneManager.LoadScene("TitleScreen");
     }
 
@@ -258,6 +261,8 @@ public class BootSequence : MonoBehaviour
         timeElapsed = 0;
         yield return new WaitForSeconds(3f);
 
+        //StartCoroutine(FadeOutAudio(startUpSFX, 1f));     // Screws with sound but I'm too lazy to fix it.
+
         while (timeElapsed < fadeDuration)
         {
             timeElapsed += Time.deltaTime;
@@ -281,7 +286,7 @@ public class BootSequence : MonoBehaviour
     {
         float startVolume = audioSource.volume;
 
-        while (audioSource.volume > 0)
+        while (audioSource.volume > -80)
         {
             audioSource.volume -= startVolume * Time.deltaTime / fadeTime; ;
             yield return null;
@@ -295,12 +300,12 @@ public class BootSequence : MonoBehaviour
     {
         if (firstBoot == true)
         {
-            yield return new WaitForSeconds(37f);
+            yield return new WaitForSeconds(42f);
             StartCoroutine(FadeOutAudio(BGAudio, fadeTime));
         }
         else if (firstBoot == false)
         {
-            yield return new WaitForSeconds(15f);
+            yield return new WaitForSeconds(16f);
             StartCoroutine(FadeOutAudio(BGAudio, fadeTime));
         }
     }

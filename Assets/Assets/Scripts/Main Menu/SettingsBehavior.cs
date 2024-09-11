@@ -1,9 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 public class SettingsBehavior : MonoBehaviour
 {
@@ -17,20 +15,9 @@ public class SettingsBehavior : MonoBehaviour
         audioMixer.GetFloat("SFX Volume", out float sfxVolume);
         audioMixer.GetFloat("Music Volume", out float musicVolume);
 
-        if (masterVolume <= -30)
-        {
-            audioMixer.SetFloat("Master Volume", -80);
-        }
-
-        if (sfxVolume <= -30)
-        {
-            audioMixer.SetFloat("SFX Volume", -80);
-        }
-
-        if (musicVolume <= -30)
-        {
-            audioMixer.SetFloat("Music Volume", -80);
-        }
+        SetMasterVolume(masterVolume);
+        SetSfxVolume(sfxVolume);
+        SetMusicVolume(musicVolume);
     }
 
     public void PlayClickSFX()
@@ -63,5 +50,21 @@ public class SettingsBehavior : MonoBehaviour
             audioMixer.SetFloat("Music Volume", -80);
         }
         else audioMixer.SetFloat("Music Volume", musicVolume);
+    }
+
+    private void ResetData()
+    {
+        Debug.Log("Data has been reset!");
+        string audioFilePath = Application.dataPath + "/AudioConfig.txt";
+        string bootFilePath = Application.dataPath + "/FirstBoot.txt";
+
+        string defaultContent = "Master Volume: 0\nSFX Volume: 0\nMusic Volume: 0";
+
+        File.WriteAllText(audioFilePath, defaultContent);
+        File.WriteAllText(bootFilePath, "TRUE");
+
+        audioMixer.SetFloat("Master Volume", 0);
+        audioMixer.SetFloat("SFX Volume", 0);
+        audioMixer.SetFloat("Music Volume", 0);
     }
 }

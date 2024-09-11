@@ -1,3 +1,0 @@
-Master Volume: 0
-SFX Volume: 0
-Music Volume: 0

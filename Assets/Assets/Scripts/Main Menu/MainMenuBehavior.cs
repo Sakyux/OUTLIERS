@@ -11,26 +11,50 @@ public class MainMenuBehavior : MonoBehaviour
     public AudioSource UISFX;
     public AudioSource BGMusic;
 
+    public Button PlayButton;
+    public Button SettingsButton;
+    public Button QuitGameButton;
+
+    private bool allowInput = false;
+
+    private void Start()
+    {
+        StartCoroutine(WaitBeforeInput(1f));
+    }
+
     public void StartGame()
     {
-        StartCoroutine(LoadLevel());
+        if (allowInput)
+        {
+            StartCoroutine(LoadLevel());
+        }
     }
 
     public void Settings()
     {
-        UISFX.Play();
+        if (allowInput)
+        {
+            UISFX.Play();
+        }
     }
 
     public void QuitGame()
     {
-        UISFX.Play();
-        Application.Quit();
+        if (allowInput)
+        {
+            UISFX.Play();
+            Application.Quit();
+        }
     }
 
     public IEnumerator LoadLevel()
     {
         transitionAnim.SetTrigger("OnClick");
         UISFX.Play();
+
+        PlayButton.enabled = false;
+        SettingsButton.enabled = false;
+        QuitGameButton.enabled = false;
 
         float fadeDuration = 1f;
         float startVolume = BGMusic.volume;
@@ -47,4 +71,9 @@ public class MainMenuBehavior : MonoBehaviour
         SceneManager.LoadScene("DefaultScreen");
     }
 
+    private IEnumerator WaitBeforeInput(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        allowInput = true;
+    }
 }
