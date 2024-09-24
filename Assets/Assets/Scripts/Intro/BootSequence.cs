@@ -8,6 +8,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.TerrainUtils;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
@@ -196,10 +197,11 @@ public class BootSequence : MonoBehaviour
 
             float ImageAlpha = Mathf.Lerp(0, targetAlpha, t);
             Color ImageColor = new Color(CreditsImage.color.r, CreditsImage.color.g, CreditsImage.color.b, ImageAlpha);
+            Color TextAlpha = new Color(CreditsText.color.r, CreditsText.color.g, CreditsText.color.b, ImageAlpha);
             Color UserTextColor = new Color(UserText.color.r, UserText.color.g, UserText.color.b, ImageAlpha);
 
             CreditsImage.color = ImageColor;
-            CreditsText.color = ImageColor;
+            CreditsText.color = TextAlpha;
             UserText.color = UserTextColor;
 
             yield return null;
@@ -215,9 +217,10 @@ public class BootSequence : MonoBehaviour
 
             float ImageAlpha = Mathf.Lerp(1, 0, t);
             Color ImageColor = new Color(CreditsImage.color.r, CreditsImage.color.g, CreditsImage.color.b, ImageAlpha);
+            Color TextAlpha = new Color(CreditsText.color.r, CreditsText.color.g, CreditsText.color.b, ImageAlpha);
             Color UserTextColor = new Color(UserText.color.r, UserText.color.g, UserText.color.b, ImageAlpha);
 
-            CreditsText.color = ImageColor;
+            CreditsText.color = TextAlpha;
             UserText.color = UserTextColor;
             yield return null;
         }
@@ -325,4 +328,3 @@ public class BootSequence : MonoBehaviour
         return localIP;
     }
 }
-

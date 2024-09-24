@@ -1,11 +1,8 @@
 using System.Collections;
 using System.IO;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -23,14 +20,17 @@ public class ResetData : MonoBehaviour
     public UnityEvent onLongClick;
 
     public AudioSource resetSFX;
+    public AudioSource cancelSFX;
     public float initialPitch;
     public float delay = 0.1f;
+
+    private bool isSelected = false;
 
     public Animator animator;
 
     private void Update()
     {
-        if (Input.GetButtonDown("Submit"))
+        if (Input.GetButtonDown("Submit") && isSelected == true)
         {
             isHolding = true;
             StartPlayingSFX();
@@ -39,15 +39,20 @@ public class ResetData : MonoBehaviour
             
         }
 
-        if (Input.GetButtonUp("Submit"))
+        else if (Input.GetButtonUp("Submit") && isSelected == true)
         {
+            if (isSelected == true)
+            {
+                cancelSFX.Play();
+            }
+
             Reset();
             StopPlayingSFX();
             StopDestroyAnimation();
             Debug.Log("Currently holding: FALSE");
         }
 
-        if (isHolding)
+        if (isHolding && isSelected == true)
         {
             currentHoldTime += Time.deltaTime;
 
@@ -58,6 +63,15 @@ public class ResetData : MonoBehaviour
                 Reset();
                 HoldResetData();
             }
+        } 
+
+        else if (isHolding == true && isSelected == false)
+        {
+            currentHoldTime = 0f;
+            StopDestroyAnimation();
+            resetSFX.Stop();
+            cancelSFX.Play();
+            isHolding = false;
         }
     }
 
@@ -65,6 +79,7 @@ public class ResetData : MonoBehaviour
     {
         isHolding = false;
         currentHoldTime = 0f;
+        cancelSFX.Play();
     }
 
     public void HoldResetData()
@@ -107,7 +122,7 @@ public class ResetData : MonoBehaviour
     {
         float pitch = initialPitch;
 
-        while (isHolding == true)
+        while (isHolding)
         {
             pitch = Mathf.Min(pitch + 0.2f, 3f);
             resetSFX.pitch = pitch;
@@ -126,5 +141,15 @@ public class ResetData : MonoBehaviour
     private void StopPlayingSFX()
     {
         StopCoroutine(PlayResetSFX());
+    }
+
+    public void OnSelect()
+    {
+        isSelected = true;
+    }
+
+    public void OffSelect()
+    {
+        isSelected = false;
     }
 }

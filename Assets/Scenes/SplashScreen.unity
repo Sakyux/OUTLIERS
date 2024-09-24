@@ -881,6 +881,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8245436350657784139, guid: 8cc12c1593c51314396e63e2cc9a22fd, type: 3}
+      propertyPath: background
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8245436350657784139, guid: 8cc12c1593c51314396e63e2cc9a22fd, type: 3}
       propertyPath: startUpSFX
       value: 
       objectReference: {fileID: 751978899}

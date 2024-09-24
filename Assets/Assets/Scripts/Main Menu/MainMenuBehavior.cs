@@ -67,8 +67,8 @@ public class MainMenuBehavior : MonoBehaviour
             yield return null;
         }
 
-        yield return new WaitForSeconds(2f);
-        SceneManager.LoadScene("DefaultScreen");
+        yield return new WaitForSeconds(1f);
+        SceneManager.LoadScene("Level 1 - Jam 17");
     }
 
     private IEnumerator WaitBeforeInput(float delay)
