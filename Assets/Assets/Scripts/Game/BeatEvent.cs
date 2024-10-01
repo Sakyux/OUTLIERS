@@ -137,16 +137,19 @@ public class BeatEvent : MonoBehaviour
                     case 1:
                         lane1.sprite = beatSprite;
                         canInput = true;
+                        lane1Animation.Play("SpawnLane");
                         currentBeat = conductor.songPositionInBeats;
                         break;
                     case 2:
                         lane2.sprite = beatSprite;
                         canInput = true;
+                        lane2Animation.Play("SpawnLane");
                         currentBeat = conductor.songPositionInBeats;
                         break;
                     case 3:
                         lane3.sprite = beatSprite;
                         canInput = true;
+                        lane3Animation.Play("SpawnLane");
                         currentBeat = conductor.songPositionInBeats;
                         break;
                 }
@@ -189,9 +192,9 @@ public class BeatEvent : MonoBehaviour
         {
             float calculateBeat = 0f;
             calculateBeat = conductor.getSongBeatPosition() - currentBeat;
-            lane1Animation.Play("SpawnLane1");
+            // Debug.Log("Beat existing for: " + calculateBeat);
 
-            if (calculateBeat >= 1.1f && canInput)
+            if (calculateBeat >= 1.3f && canInput)
             {
                 lane1.sprite = null;
                 input = null;
@@ -231,9 +234,7 @@ public class BeatEvent : MonoBehaviour
         {
             float calculateBeat = 0f;
             calculateBeat = conductor.getSongBeatPosition() - currentBeat;
-            Debug.Log("Beat existing for: " + calculateBeat);
-
-            lane2Animation.Play("SpawnLane2");
+            // Debug.Log("Beat existing for: " + calculateBeat);
 
             if (calculateBeat >= 1.3f && canInput)
             {
@@ -268,16 +269,15 @@ public class BeatEvent : MonoBehaviour
                 HitMarkerAnimator.Play("Spawn");
                 StartCoroutine(WaitBeforeDestroy(lane2));
             }
-        } 
+        }
 
         // UPON LANE 3 EXIST
         if (lane3.sprite != null)
         {
             float calculateBeat = 0f;
             calculateBeat = conductor.getSongBeatPosition() - currentBeat;
-            lane3Animation.Play("SpawnLane3");
 
-            if (calculateBeat >= 1.1f && canInput)
+            if (calculateBeat >= 1.3f && canInput)
             {
                 lane3.sprite = null;
                 input = null;
@@ -345,6 +345,7 @@ public class BeatEvent : MonoBehaviour
     private void SetMissedHit()
     {
         combo = 0;
+        HitMarker.gameObject.SetActive(true);
         HitMarkerAnimator.Play("Spawn");
     }
 
@@ -363,15 +364,15 @@ public class BeatEvent : MonoBehaviour
 
     private void CalculateScore(float calculateBeat, SpriteRenderer lane)
     {
-
         // Checks if "input" is pressed
         if (controls.FindAction(input).WasPressedThisFrame() && canInput == true)
         {
             float currentBeat = calculateBeat;
+            HitMarker.gameObject.SetActive(true);
             HitMarkerAnimator.Play("Spawn");
 
-            // FIRST WORKING ITERATION OF THE JUDGEMENT LINE ----- IT'S WORKING
-            if (currentBeat <= 1.1f && currentBeat >= 0.85f)
+            // SECOND WORKING ITERATION OF THE JUDGEMENT LINE ----- TWEAKED VALUES FOR DIFFICULT BALANCING
+            if (currentBeat <= 1f && currentBeat >= 0.90f)
             {
                 SetPerfectHit();
                 Debug.Log("Perfect Hit!");
@@ -380,7 +381,7 @@ public class BeatEvent : MonoBehaviour
                 canInput = false;
             }
 
-            else if (currentBeat <= 0.85f && currentBeat > 0.70f)
+            else if (currentBeat <= 0.90f && currentBeat > 0.70f)
             {
                 SetGoodHit();
                 Debug.Log("Good Hit!");
