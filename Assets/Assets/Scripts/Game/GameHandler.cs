@@ -42,7 +42,6 @@ public class GameHandler : MonoBehaviour
 
     private IEnumerator StartDelay()
     {
-        yield return new WaitForSeconds(2f);
         IntroVideo.SetActive(true);
 
         yield return new WaitForSeconds(5f);
@@ -104,6 +103,7 @@ public class GameHandler : MonoBehaviour
 
                 SongDisplay.SetActive(true);
 
+                closeTutorial = true;
                 StartCoroutine(PlayPhaseTwo());
             }
         }

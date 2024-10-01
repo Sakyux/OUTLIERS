@@ -5,6 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using System.Linq;
+using UnityEngine.VFX;
+using TMPro;
+using Autodesk.Fbx;
 
 public class BeatEvent : MonoBehaviour
 {
@@ -25,8 +28,11 @@ public class BeatEvent : MonoBehaviour
     public Sprite leftTrigger;
     public Sprite rightTrigger;
 
+    public GameObject ComboCounter;
+    public GameObject ScoreCounter;
+
     public float score = 0;
-    public int combo = 0;
+    public float combo = 0;
 
     public const float PerfectHit = 300f;
     public const float GoodHit = 100f;
@@ -36,13 +42,33 @@ public class BeatEvent : MonoBehaviour
 
     private string input;
 
-    private AudioConductor conductor;
+    private bool canInput = false;
 
-    GameplayControls controls;
+    private float currentBeat = 0f;
 
-    private void Start()
+    public AudioConductor conductor;
+
+    public GameplayControls controls;
+
+    private float timeElapsed;
+    private float hitMarkerTime = 0f;
+
+    public Animator lane1Animation;
+    public Animator lane2Animation;
+    public Animator lane3Animation;
+
+    public Image HitMarker;
+    public Animator HitMarkerAnimator;
+
+    public Sprite PERFECT;
+    public Sprite GOOD;
+    public Sprite MEH;
+    public Sprite MISS;
+
+    private void Awake()
     {
-
+        controls = new GameplayControls();
+        controls.Enable();
     }
 
     public void Beat(int lane, string key, float position)
@@ -53,80 +79,80 @@ public class BeatEvent : MonoBehaviour
         {
             case "Cross":
                 beatSprite = cross;
-                input = key;
                 break;
 
             case "Square":
                 beatSprite = square;
-                input = key;
                 break;
 
             case "Triangle":
                 beatSprite = triangle;
-                input = key;
                 break;
 
             case "Circle":
                 beatSprite = circle;
-                input = key;
                 break;
 
             case "UpArrow":
                 beatSprite = upArrow;
-                input = key;
                 break;
 
             case "DownArrow":
                 beatSprite = downArrow;
-                input = key;
                 break;
 
             case "LeftArrow":
                 beatSprite = leftArrow;
-                input = key;
                 break;
 
             case "RightArrow":
                 beatSprite = rightArrow;
-                input = key;
                 break;
 
             case "LeftButton":
                 beatSprite = leftButton;
-                input = key;
                 break;
 
             case "RightButton":
                 beatSprite = rightButton;
-                input = key;
                 break;
 
             case "LeftTrigger":
                 beatSprite = leftTrigger;
-                input = key;
                 break;
 
             case "RightTrigger":
                 beatSprite = rightTrigger;
-                input = key;
                 break;
         }
 
         if (beatSprite != null)
         {
-            switch (lane)
+            if (conductor.songPositionInBeats >= position - 0.1f && conductor.songPositionInBeats <= position + 0.1f)
             {
-                case 1:
-                    lane1.sprite = beatSprite;
-                    break;
-                case 2:
-                    lane2.sprite = beatSprite;
-                    break;
-                case 3:
-                    lane3.sprite = beatSprite;
-                    break;
+                input = key;
+
+                switch (lane)
+                {
+                    case 1:
+                        lane1.sprite = beatSprite;
+                        canInput = true;
+                        currentBeat = conductor.songPositionInBeats;
+                        break;
+                    case 2:
+                        lane2.sprite = beatSprite;
+                        canInput = true;
+                        currentBeat = conductor.songPositionInBeats;
+                        break;
+                    case 3:
+                        lane3.sprite = beatSprite;
+                        canInput = true;
+                        currentBeat = conductor.songPositionInBeats;
+                        break;
+                }
             }
         }
+
         else
         {
             Debug.LogError($"Failed to load sprite: {key}");
@@ -135,74 +161,275 @@ public class BeatEvent : MonoBehaviour
 
     private void Update()
     {
+        ShowCombo();
+        ShowScore();
+        RoundOffScore();
+
+        // REMOVES HIT MARKER AFTER 3 SEC
+        if (HitMarker.sprite != null)
+        {
+            hitMarkerTime += Time.deltaTime;
+
+            if (hitMarkerTime > 3f)
+            {
+                HitMarker.sprite = null;
+                HitMarker.gameObject.SetActive(false);
+                hitMarkerTime = 0f;
+            }
+        }
+
+        // RESET MULTIPLIER
+        if (combo == 0)
+        {
+            Multiplier = 1f;
+        }
+
+        // UPON LANE 1 EXIST
         if (lane1.sprite != null)
         {
-            float timeElapsed = -1f;
+            float calculateBeat = 0f;
+            calculateBeat = conductor.getSongBeatPosition() - currentBeat;
+            lane1Animation.Play("SpawnLane1");
 
-            timeElapsed += Time.deltaTime;
-
-            if (timeElapsed > 1f)
+            if (calculateBeat >= 1.1f && canInput)
             {
                 lane1.sprite = null;
                 input = null;
-                ResetCombo();
+                SetMissedHit();
+                ShowHitMarker(MISS);
+                Debug.Log("Missed!");
+                HitMarkerAnimator.Play("Spawn");
+                timeElapsed = 0f;
+                hitMarkerTime = 0f;
+                canInput = false;
+                return;
             }
 
-            if (controls.FindAction(input).WasPressedThisFrame())
+            // Checks if "input" is pressed
+            if (controls.FindAction(input).WasPressedThisFrame() && canInput)
             {
-                if (timeElapsed <= -0.25f || timeElapsed >= 0.25f)
-                {
-                    SetPerfectHit();
-                    Debug.Log("Perfect Hit!");
-                }
+                CalculateScore(calculateBeat, lane1);
+                hitMarkerTime = 0f;
+            }
 
-                else if (timeElapsed >= -0.75f && timeElapsed > -0.25f || timeElapsed <= 0.75f && timeElapsed < 0.25f)
-                {
-                    SetGoodHit();
-                    Debug.Log("Good Hit!");
-                }
-
-                else if (timeElapsed < -0.75f || timeElapsed > 0.75f)
-                {
-                    SetMehHit();
-                    Debug.Log("Meh Hit!");
-                }
-
-            } else if (controls.Any(action => action.WasPressedThisFrame() && !controls.FindAction(input).WasPressedThisFrame()))
+            // Checks if wrong "input" is pressed
+            else if (controls.Any(action => action.WasPressedThisFrame() && !action.Equals(input)))
             {
-                ResetCombo();
+                SetMissedHit();
                 Debug.Log("Incorrect Input!");
+                timeElapsed = 0f;
+                hitMarkerTime = 0f;
+                canInput = false;
+                ShowHitMarker(MISS);
+                HitMarkerAnimator.Play("Spawn");
+                StartCoroutine(WaitBeforeDestroy(lane1));
             }
         }
 
-        // UPDATING MULTIPLIER
-        if (combo != 0)
+        // UPON LANE 2 EXIST
+        if (lane2.sprite != null)
         {
-            Multiplier += (combo / 100);
+            float calculateBeat = 0f;
+            calculateBeat = conductor.getSongBeatPosition() - currentBeat;
+            Debug.Log("Beat existing for: " + calculateBeat);
+
+            lane2Animation.Play("SpawnLane2");
+
+            if (calculateBeat >= 1.3f && canInput)
+            {
+                lane2.sprite = null;
+                input = null;
+                SetMissedHit();
+                ShowHitMarker(MISS);
+                Debug.Log("Missed!");
+                HitMarkerAnimator.Play("Spawn");
+                timeElapsed = 0f;
+                hitMarkerTime = 0f;
+                canInput = false;
+                return;
+            }
+
+            // Checks if "input" is pressed
+            if (controls.FindAction(input).WasPressedThisFrame() && canInput)
+            {
+                CalculateScore(calculateBeat, lane2);
+                hitMarkerTime = 0f;
+            }
+
+            // Checks if wrong "input" is pressed
+            else if (controls.Any(action => action.WasPressedThisFrame() && !action.Equals(input)))
+            {
+                SetMissedHit();
+                Debug.Log("Incorrect Input!");
+                timeElapsed = 0f;
+                hitMarkerTime = 0f;
+                canInput = false;
+                ShowHitMarker(MISS);
+                HitMarkerAnimator.Play("Spawn");
+                StartCoroutine(WaitBeforeDestroy(lane2));
+            }
+        } 
+
+        // UPON LANE 3 EXIST
+        if (lane3.sprite != null)
+        {
+            float calculateBeat = 0f;
+            calculateBeat = conductor.getSongBeatPosition() - currentBeat;
+            lane3Animation.Play("SpawnLane3");
+
+            if (calculateBeat >= 1.1f && canInput)
+            {
+                lane3.sprite = null;
+                input = null;
+                SetMissedHit();
+                ShowHitMarker(MISS);
+                Debug.Log("Missed!");
+                HitMarkerAnimator.Play("Spawn");
+                timeElapsed = 0f;
+                hitMarkerTime = 0f;
+                canInput = false;
+                return;
+            }
+
+            // Checks if "input" is pressed
+            if (controls.FindAction(input).WasPressedThisFrame() && canInput)
+            {
+                CalculateScore(calculateBeat, lane3);
+                hitMarkerTime = 0f;
+            }
+
+            // Checks if wrong "input" is pressed
+            else if (controls.Any(action => action.WasPressedThisFrame() && !action.Equals(input)))
+            {
+                SetMissedHit();
+                Debug.Log("Incorrect Input!");
+                timeElapsed = 0f;
+                hitMarkerTime = 0f;
+                canInput = false;
+                ShowHitMarker(MISS);
+                HitMarkerAnimator.Play("Spawn");
+                StartCoroutine(WaitBeforeDestroy(lane3));
+            }
         }
-        else Multiplier = 1f;
+    }
+
+    private void UpdateMultiplier()
+    {
+        Multiplier += (combo / 100);
     }
 
     private void SetPerfectHit()
     {
-        score += PerfectHit;
+        score += PerfectHit * Multiplier;
         combo++;
+        HitMarkerAnimator.Play("Spawn");
+        UpdateMultiplier();
     }
 
     private void SetGoodHit()
     {
-        score += GoodHit;
+        score += GoodHit * Multiplier;
         combo++;
+        HitMarkerAnimator.Play("Spawn");
+        UpdateMultiplier();
     }
 
     private void SetMehHit()
     {
-        score += MehHit;
+        score += MehHit * Multiplier;
         combo++;
+        HitMarkerAnimator.Play("Spawn");
+        UpdateMultiplier();
     }
 
-    private void ResetCombo()
+    private void SetMissedHit()
     {
         combo = 0;
+        HitMarkerAnimator.Play("Spawn");
+    }
+
+    private void ShowCombo()
+    {
+        if (combo > 0 )
+        {
+            ComboCounter.SetActive(true);
+        }
+
+        else if (combo <= 0)
+        {
+            ComboCounter.SetActive(false);
+        }
+    }
+
+    private void CalculateScore(float calculateBeat, SpriteRenderer lane)
+    {
+
+        // Checks if "input" is pressed
+        if (controls.FindAction(input).WasPressedThisFrame() && canInput == true)
+        {
+            float currentBeat = calculateBeat;
+            HitMarkerAnimator.Play("Spawn");
+
+            // FIRST WORKING ITERATION OF THE JUDGEMENT LINE ----- IT'S WORKING
+            if (currentBeat <= 1.1f && currentBeat >= 0.85f)
+            {
+                SetPerfectHit();
+                Debug.Log("Perfect Hit!");
+                StartCoroutine(WaitBeforeDestroy(lane));
+                ShowHitMarker(PERFECT);
+                canInput = false;
+            }
+
+            else if (currentBeat <= 0.85f && currentBeat > 0.70f)
+            {
+                SetGoodHit();
+                Debug.Log("Good Hit!");
+                StartCoroutine(WaitBeforeDestroy(lane));
+                ShowHitMarker(GOOD);
+                canInput = false;
+            }
+
+            else if (currentBeat <= 0.70f && currentBeat > 0.60f)
+            {
+                SetMehHit();
+                Debug.Log("Meh Hit!");
+                StartCoroutine(WaitBeforeDestroy(lane));
+                ShowHitMarker(MEH);
+                canInput = false;
+            }
+
+            else if (currentBeat > 1.1f || currentBeat < 0.60f)
+            {
+                SetMissedHit();
+                Debug.Log("Missed!");
+                StartCoroutine(WaitBeforeDestroy(lane));
+                ShowHitMarker(MISS);
+            }
+        }
+    }
+
+    private void ShowScore()
+    {
+        if (score > 0)
+        {
+            ScoreCounter.SetActive(true);
+        }
+    }
+
+    private IEnumerator WaitBeforeDestroy(SpriteRenderer lane)
+    {
+        yield return new WaitForSeconds(0.1f);
+        lane.sprite = null;
+    }
+
+    private void RoundOffScore()
+    {
+        score = Mathf.Round(score);
+    }
+
+    private void ShowHitMarker(Sprite sprite)
+    {
+        HitMarker.gameObject.SetActive(true);
+        HitMarker.sprite = sprite;
     }
 }

@@ -33,4 +33,9 @@ public class AudioConductor : MonoBehaviour
     {
         return songPositionInBeats; 
     }
+
+    public float getSecPerBeat()
+    {
+        return secPerBeat;
+    }
 }
