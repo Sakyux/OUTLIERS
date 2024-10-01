@@ -137,19 +137,19 @@ public class BeatEvent : MonoBehaviour
                     case 1:
                         lane1.sprite = beatSprite;
                         canInput = true;
-                        lane1Animation.Play("SpawnLane");
+                        lane1Animation.Play("SpawnLane1");
                         currentBeat = conductor.songPositionInBeats;
                         break;
                     case 2:
                         lane2.sprite = beatSprite;
                         canInput = true;
-                        lane2Animation.Play("SpawnLane");
+                        lane2Animation.Play("SpawnLane2");
                         currentBeat = conductor.songPositionInBeats;
                         break;
                     case 3:
                         lane3.sprite = beatSprite;
                         canInput = true;
-                        lane3Animation.Play("SpawnLane");
+                        lane3Animation.Play("SpawnLane3");
                         currentBeat = conductor.songPositionInBeats;
                         break;
                 }
