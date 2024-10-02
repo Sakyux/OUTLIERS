@@ -65,6 +65,9 @@ public class BeatEvent : MonoBehaviour
     public Sprite MEH;
     public Sprite MISS;
 
+    public AudioSource HitSFX;
+    public AudioSource ComboBreakSFX;
+
     private void Awake()
     {
         controls = new GameplayControls();
@@ -137,18 +140,24 @@ public class BeatEvent : MonoBehaviour
                     case 1:
                         lane1.sprite = beatSprite;
                         canInput = true;
+                        lane1Animation.SetBool("isMiss", false);
+                        lane1Animation.SetBool("isHit", false);
                         lane1Animation.Play("SpawnLane1");
                         currentBeat = conductor.songPositionInBeats;
                         break;
                     case 2:
                         lane2.sprite = beatSprite;
                         canInput = true;
+                        lane2Animation.SetBool("isMiss", false);
+                        lane2Animation.SetBool("isHit", false);
                         lane2Animation.Play("SpawnLane2");
                         currentBeat = conductor.songPositionInBeats;
                         break;
                     case 3:
                         lane3.sprite = beatSprite;
                         canInput = true;
+                        lane3Animation.SetBool("isMiss", false);
+                        lane3Animation.SetBool("isHit", false);
                         lane3Animation.Play("SpawnLane3");
                         currentBeat = conductor.songPositionInBeats;
                         break;
@@ -201,6 +210,7 @@ public class BeatEvent : MonoBehaviour
                 SetMissedHit();
                 ShowHitMarker(MISS);
                 Debug.Log("Missed!");
+                lane1Animation.SetBool("isMiss", true);
                 HitMarkerAnimator.Play("Spawn");
                 timeElapsed = 0f;
                 hitMarkerTime = 0f;
@@ -211,7 +221,7 @@ public class BeatEvent : MonoBehaviour
             // Checks if "input" is pressed
             if (controls.FindAction(input).WasPressedThisFrame() && canInput)
             {
-                CalculateScore(calculateBeat, lane1);
+                CalculateScore(calculateBeat, lane1, lane1Animation);
                 hitMarkerTime = 0f;
             }
 
@@ -224,8 +234,9 @@ public class BeatEvent : MonoBehaviour
                 hitMarkerTime = 0f;
                 canInput = false;
                 ShowHitMarker(MISS);
+                lane1Animation.SetBool("isMiss", true);
                 HitMarkerAnimator.Play("Spawn");
-                StartCoroutine(WaitBeforeDestroy(lane1));
+                StartCoroutine(WaitBeforeDestroy(lane1, lane1Animation));
             }
         }
 
@@ -242,6 +253,7 @@ public class BeatEvent : MonoBehaviour
                 input = null;
                 SetMissedHit();
                 ShowHitMarker(MISS);
+                lane2Animation.SetBool("isMiss", true);
                 Debug.Log("Missed!");
                 HitMarkerAnimator.Play("Spawn");
                 timeElapsed = 0f;
@@ -253,7 +265,7 @@ public class BeatEvent : MonoBehaviour
             // Checks if "input" is pressed
             if (controls.FindAction(input).WasPressedThisFrame() && canInput)
             {
-                CalculateScore(calculateBeat, lane2);
+                CalculateScore(calculateBeat, lane2, lane2Animation);
                 hitMarkerTime = 0f;
             }
 
@@ -266,8 +278,9 @@ public class BeatEvent : MonoBehaviour
                 hitMarkerTime = 0f;
                 canInput = false;
                 ShowHitMarker(MISS);
+                lane2Animation.SetBool("isMiss", true);
                 HitMarkerAnimator.Play("Spawn");
-                StartCoroutine(WaitBeforeDestroy(lane2));
+                StartCoroutine(WaitBeforeDestroy(lane2, lane2Animation));
             }
         }
 
@@ -284,6 +297,7 @@ public class BeatEvent : MonoBehaviour
                 SetMissedHit();
                 ShowHitMarker(MISS);
                 Debug.Log("Missed!");
+                lane3Animation.SetBool("isMiss", true);
                 HitMarkerAnimator.Play("Spawn");
                 timeElapsed = 0f;
                 hitMarkerTime = 0f;
@@ -294,7 +308,7 @@ public class BeatEvent : MonoBehaviour
             // Checks if "input" is pressed
             if (controls.FindAction(input).WasPressedThisFrame() && canInput)
             {
-                CalculateScore(calculateBeat, lane3);
+                CalculateScore(calculateBeat, lane3, lane3Animation);
                 hitMarkerTime = 0f;
             }
 
@@ -307,8 +321,9 @@ public class BeatEvent : MonoBehaviour
                 hitMarkerTime = 0f;
                 canInput = false;
                 ShowHitMarker(MISS);
+                lane3Animation.SetBool("isMiss", true);
                 HitMarkerAnimator.Play("Spawn");
-                StartCoroutine(WaitBeforeDestroy(lane3));
+                StartCoroutine(WaitBeforeDestroy(lane3, lane3Animation));
             }
         }
     }
@@ -323,6 +338,7 @@ public class BeatEvent : MonoBehaviour
         score += PerfectHit * Multiplier;
         combo++;
         HitMarkerAnimator.Play("Spawn");
+        HitSFX.Play();
         UpdateMultiplier();
     }
 
@@ -331,6 +347,7 @@ public class BeatEvent : MonoBehaviour
         score += GoodHit * Multiplier;
         combo++;
         HitMarkerAnimator.Play("Spawn");
+        HitSFX.Play();
         UpdateMultiplier();
     }
 
@@ -339,12 +356,19 @@ public class BeatEvent : MonoBehaviour
         score += MehHit * Multiplier;
         combo++;
         HitMarkerAnimator.Play("Spawn");
+        HitSFX.Play();
         UpdateMultiplier();
     }
 
     private void SetMissedHit()
     {
-        combo = 0;
+        if (combo > 5)
+        {
+            ComboBreakSFX.Play();
+            combo = 0;
+        } 
+        else combo = 0;
+
         HitMarker.gameObject.SetActive(true);
         HitMarkerAnimator.Play("Spawn");
     }
@@ -362,7 +386,7 @@ public class BeatEvent : MonoBehaviour
         }
     }
 
-    private void CalculateScore(float calculateBeat, SpriteRenderer lane)
+    private void CalculateScore(float calculateBeat, SpriteRenderer lane, Animator animator)
     {
         // Checks if "input" is pressed
         if (controls.FindAction(input).WasPressedThisFrame() && canInput == true)
@@ -372,39 +396,50 @@ public class BeatEvent : MonoBehaviour
             HitMarkerAnimator.Play("Spawn");
 
             // SECOND WORKING ITERATION OF THE JUDGEMENT LINE ----- TWEAKED VALUES FOR DIFFICULT BALANCING
-            if (currentBeat <= 1f && currentBeat >= 0.90f)
+            if (currentBeat <= 1f && currentBeat >= 0.80f)
             {
                 SetPerfectHit();
                 Debug.Log("Perfect Hit!");
-                StartCoroutine(WaitBeforeDestroy(lane));
+                StartCoroutine(WaitBeforeDestroy(lane, animator));
                 ShowHitMarker(PERFECT);
+                animator.SetBool("isHit", true);
+                animator.SetBool("isMiss", false);
+                HitSFX.Play();
                 canInput = false;
             }
 
-            else if (currentBeat <= 0.90f && currentBeat > 0.70f)
+            else if (currentBeat <= 0.80f && currentBeat > 0.75f)
             {
                 SetGoodHit();
                 Debug.Log("Good Hit!");
-                StartCoroutine(WaitBeforeDestroy(lane));
+                StartCoroutine(WaitBeforeDestroy(lane, animator));
                 ShowHitMarker(GOOD);
+                animator.SetBool("isHit", true);
+                animator.SetBool("isMiss", false);
+                HitSFX.Play();
                 canInput = false;
             }
 
-            else if (currentBeat <= 0.70f && currentBeat > 0.60f)
+            else if (currentBeat <= 0.75f && currentBeat > 0.70f)
             {
                 SetMehHit();
                 Debug.Log("Meh Hit!");
-                StartCoroutine(WaitBeforeDestroy(lane));
+                StartCoroutine(WaitBeforeDestroy(lane, animator));
                 ShowHitMarker(MEH);
+                animator.SetBool("isHit", true);
+                animator.SetBool("isMiss", false);
+                HitSFX.Play();
                 canInput = false;
             }
 
-            else if (currentBeat > 1.1f || currentBeat < 0.60f)
+            else if (currentBeat > 1.1f || currentBeat < 0.70f)
             {
                 SetMissedHit();
                 Debug.Log("Missed!");
-                StartCoroutine(WaitBeforeDestroy(lane));
+                StartCoroutine(WaitBeforeDestroy(lane, animator));
                 ShowHitMarker(MISS);
+                animator.SetBool("isHit", false);
+                animator.SetBool("isMiss", true);
             }
         }
     }
@@ -417,9 +452,9 @@ public class BeatEvent : MonoBehaviour
         }
     }
 
-    private IEnumerator WaitBeforeDestroy(SpriteRenderer lane)
+    private IEnumerator WaitBeforeDestroy(SpriteRenderer lane, Animator animator)
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.5f);
         lane.sprite = null;
     }
 

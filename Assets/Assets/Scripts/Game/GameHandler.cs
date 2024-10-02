@@ -34,6 +34,8 @@ public class GameHandler : MonoBehaviour
 
     public GameObject AudioConductor;
 
+    public GameObject TutorialVideo;
+
     private void Start()
     {
         StartCoroutine(StartDelay());
@@ -67,6 +69,7 @@ public class GameHandler : MonoBehaviour
         tutorialIsOn = true;
 
         TutorialText.SetBool("isActive", true);
+        TutorialVideo.SetActive(true);
 
         tutorialSFX.Play();
         PauseIcon.SetActive(true);
@@ -102,6 +105,7 @@ public class GameHandler : MonoBehaviour
                 TutorialUiIcon.SetActive(false);
 
                 SongDisplay.SetActive(true);
+                TutorialVideo.SetActive(false);
 
                 closeTutorial = true;
                 StartCoroutine(PlayPhaseTwo());
