@@ -22,5 +22,4 @@ public class Beatmaps : MonoBehaviour
             BeatEvent.Beat(2, "RightButton", 22f);
         }
     }
-
 }

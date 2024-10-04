@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Threading;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.Video;
 
 public class GameHandler : MonoBehaviour
 {
@@ -20,6 +23,7 @@ public class GameHandler : MonoBehaviour
     public Animator BackgroundAnimator;
     public Animator JudgementLine;
     public Animator TutorialText;
+    public VideoPlayer TutorialVid;
 
     public AudioSource tutorialSFX;
     public AudioSource tutorialStop;
@@ -33,8 +37,28 @@ public class GameHandler : MonoBehaviour
     public GameObject TutorialUiIcon;
 
     public GameObject AudioConductor;
+    public AudioConductor audioConductor;
 
     public GameObject TutorialVideo;
+
+    public GameplayControls controls;
+
+    public GameObject pauseIcon;
+    public GameObject PauseBG;
+    public GameObject PauseMenu;
+
+    private bool isPaused = false;
+    private bool playingMusic = false;
+
+    public GameObject FirstButtonSelected;
+
+    public PauseMenu pauseMenu;
+
+    private void Awake()
+    {
+        controls = new GameplayControls();
+        controls.Enable();
+    }
 
     private void Start()
     {
@@ -68,13 +92,15 @@ public class GameHandler : MonoBehaviour
         TutorialAnimator.SetBool("IsOn", true);
         tutorialIsOn = true;
 
+        playingMusic = true;
         TutorialText.SetBool("isActive", true);
-        TutorialVideo.SetActive(true);
 
         tutorialSFX.Play();
         PauseIcon.SetActive(true);
 
         JudgementLine.SetBool("Tutorial Mode", true);
+
+        TutorialVideo.SetActive(true);
         yield return null;
     }
 
@@ -82,9 +108,9 @@ public class GameHandler : MonoBehaviour
     {
         if (tutorialIsOn == true)
         {
-
             if (Input.GetButtonDown("Submit"))
             {
+                TutorialVideo.SetActive(false);
                 TutorialAnimator.SetBool("IsOn", false);
                 tutorialIsOn = false;
                 BackgroundAnimator.SetFloat("Speed", -3f);
@@ -105,10 +131,23 @@ public class GameHandler : MonoBehaviour
                 TutorialUiIcon.SetActive(false);
 
                 SongDisplay.SetActive(true);
-                TutorialVideo.SetActive(false);
 
                 closeTutorial = true;
                 StartCoroutine(PlayPhaseTwo());
+            }
+        }
+            
+        if (tutorialIsOn == false && playingMusic == true)
+        {
+            if (controls.PauseMenu.Pause.WasPressedThisFrame() && isPaused == false)
+            {
+                Pause();
+            }
+
+            else if (controls.PauseMenu.Pause.WasPressedThisFrame() && isPaused == true)
+            {
+                StartCoroutine(GameplayDelay());
+                Resume();
             }
         }
     }
@@ -135,5 +174,42 @@ public class GameHandler : MonoBehaviour
     public bool HasCloseTutorial()
     {
         return closeTutorial;
+    }
+
+    public void Pause()
+    {
+        Time.timeScale = 0f;
+        pauseIcon.SetActive(true);
+        controls.Gameplay.Disable();
+        GameMusic2.Pause();
+        PauseBG.SetActive(true);
+        PauseMenu.SetActive(true);
+        isPaused = true;
+
+        pauseMenu.SetGameResumed(false);
+
+        EventSystem.current.SetSelectedGameObject(FirstButtonSelected.gameObject);
+    }
+
+    public void Resume()
+    {
+        Time.timeScale = 1f;
+        pauseIcon.SetActive(false);
+        GameMusic2.Play();
+        PauseBG.SetActive(false);
+        PauseMenu.SetActive(false);
+        isPaused = false;
+    }
+
+    public bool GetPaused()
+    {
+        return isPaused;
+    }
+
+    public IEnumerator GameplayDelay()
+    {
+        controls.Gameplay.Disable();
+        yield return new WaitForSeconds(0.3f);
+        controls.Gameplay.Enable();
     }
 }

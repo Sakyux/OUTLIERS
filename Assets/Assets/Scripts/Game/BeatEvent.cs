@@ -47,8 +47,8 @@ public class BeatEvent : MonoBehaviour
     private float currentBeat = 0f;
 
     public AudioConductor conductor;
-
     public GameplayControls controls;
+    public GameHandler gameHandler;
 
     private float timeElapsed;
     private float hitMarkerTime = 0f;
@@ -67,6 +67,10 @@ public class BeatEvent : MonoBehaviour
 
     public AudioSource HitSFX;
     public AudioSource ComboBreakSFX;
+
+    public Button ResumeButton;
+
+    public PauseMenu PauseMenu;
 
     private void Awake()
     {
@@ -196,134 +200,137 @@ public class BeatEvent : MonoBehaviour
             Multiplier = 1f;
         }
 
-        // UPON LANE 1 EXIST
-        if (lane1.sprite != null)
+        if (!gameHandler.GetPaused() && controls.Gameplay.enabled)
         {
-            float calculateBeat = 0f;
-            calculateBeat = conductor.getSongBeatPosition() - currentBeat;
-            // Debug.Log("Beat existing for: " + calculateBeat);
-
-            if (calculateBeat >= 1.3f && canInput)
+            // UPON LANE 1 EXIST
+            if (lane1.sprite != null)
             {
-                lane1.sprite = null;
-                input = null;
-                SetMissedHit();
-                ShowHitMarker(MISS);
-                Debug.Log("Missed!");
-                lane1Animation.SetBool("isMiss", true);
-                HitMarkerAnimator.Play("Spawn");
-                timeElapsed = 0f;
-                hitMarkerTime = 0f;
-                canInput = false;
-                return;
+                float calculateBeat = 0f;
+                calculateBeat = conductor.getSongBeatPosition() - currentBeat;
+                // Debug.Log("Beat existing for: " + calculateBeat);
+
+                if (calculateBeat >= 1.3f && canInput)
+                {
+                    lane1.sprite = null;
+                    input = null;
+                    SetMissedHit();
+                    ShowHitMarker(MISS);
+                    Debug.Log("Missed!");
+                    lane1Animation.SetBool("isMiss", true);
+                    HitMarkerAnimator.Play("Spawn");
+                    timeElapsed = 0f;
+                    hitMarkerTime = 0f;
+                    canInput = false;
+                    return;
+                }
+
+                // Checks if "input" is pressed
+                if (controls.FindAction(input).WasPressedThisFrame() && canInput && !controls.PauseMenu.Pause.WasPerformedThisFrame() && PauseMenu.IsGameResumed())
+                {
+                    CalculateScore(calculateBeat, lane1, lane1Animation);
+                    hitMarkerTime = 0f;
+                }
+
+                // Checks if wrong "input" is pressed
+                else if (controls.Any(action => action.WasPressedThisFrame() && !action.Equals(input) && !controls.PauseMenu.Pause.WasPerformedThisFrame()) && PauseMenu.IsGameResumed())
+                {
+                    SetMissedHit();
+                    Debug.Log("Incorrect Input!");
+                    timeElapsed = 0f;
+                    hitMarkerTime = 0f;
+                    canInput = false;
+                    ShowHitMarker(MISS);
+                    lane1Animation.SetBool("isMiss", true);
+                    HitMarkerAnimator.Play("Spawn");
+                    StartCoroutine(WaitBeforeDestroy(lane1, lane1Animation));
+                }
             }
 
-            // Checks if "input" is pressed
-            if (controls.FindAction(input).WasPressedThisFrame() && canInput)
+            // UPON LANE 2 EXIST
+            if (lane2.sprite != null)
             {
-                CalculateScore(calculateBeat, lane1, lane1Animation);
-                hitMarkerTime = 0f;
+                float calculateBeat = 0f;
+                calculateBeat = conductor.getSongBeatPosition() - currentBeat;
+                // Debug.Log("Beat existing for: " + calculateBeat);
+
+                if (calculateBeat >= 1.3f && canInput)
+                {
+                    lane2.sprite = null;
+                    input = null;
+                    SetMissedHit();
+                    ShowHitMarker(MISS);
+                    lane2Animation.SetBool("isMiss", true);
+                    Debug.Log("Missed!");
+                    HitMarkerAnimator.Play("Spawn");
+                    timeElapsed = 0f;
+                    hitMarkerTime = 0f;
+                    canInput = false;
+                    return;
+                }
+
+                // Checks if "input" is pressed
+                if (controls.FindAction(input).WasPressedThisFrame() && canInput && !controls.PauseMenu.Pause.WasPerformedThisFrame() && PauseMenu.IsGameResumed())
+                {
+                    CalculateScore(calculateBeat, lane2, lane2Animation);
+                    hitMarkerTime = 0f;
+                }
+
+                // Checks if wrong "input" is pressed
+                else if (controls.Any(action => action.WasPressedThisFrame() && !action.Equals(input) && !controls.PauseMenu.Pause.WasPerformedThisFrame()) && PauseMenu.IsGameResumed())
+                {
+                    SetMissedHit();
+                    Debug.Log("Incorrect Input!");
+                    timeElapsed = 0f;
+                    hitMarkerTime = 0f;
+                    canInput = false;
+                    ShowHitMarker(MISS);
+                    lane2Animation.SetBool("isMiss", true);
+                    HitMarkerAnimator.Play("Spawn");
+                    StartCoroutine(WaitBeforeDestroy(lane2, lane2Animation));
+                }
             }
 
-            // Checks if wrong "input" is pressed
-            else if (controls.Any(action => action.WasPressedThisFrame() && !action.Equals(input)))
+            // UPON LANE 3 EXIST
+            if (lane3.sprite != null)
             {
-                SetMissedHit();
-                Debug.Log("Incorrect Input!");
-                timeElapsed = 0f;
-                hitMarkerTime = 0f;
-                canInput = false;
-                ShowHitMarker(MISS);
-                lane1Animation.SetBool("isMiss", true);
-                HitMarkerAnimator.Play("Spawn");
-                StartCoroutine(WaitBeforeDestroy(lane1, lane1Animation));
-            }
-        }
+                float calculateBeat = 0f;
+                calculateBeat = conductor.getSongBeatPosition() - currentBeat;
 
-        // UPON LANE 2 EXIST
-        if (lane2.sprite != null)
-        {
-            float calculateBeat = 0f;
-            calculateBeat = conductor.getSongBeatPosition() - currentBeat;
-            // Debug.Log("Beat existing for: " + calculateBeat);
+                if (calculateBeat >= 1.3f && canInput)
+                {
+                    lane3.sprite = null;
+                    input = null;
+                    SetMissedHit();
+                    ShowHitMarker(MISS);
+                    Debug.Log("Missed!");
+                    lane3Animation.SetBool("isMiss", true);
+                    HitMarkerAnimator.Play("Spawn");
+                    timeElapsed = 0f;
+                    hitMarkerTime = 0f;
+                    canInput = false;
+                    return;
+                }
 
-            if (calculateBeat >= 1.3f && canInput)
-            {
-                lane2.sprite = null;
-                input = null;
-                SetMissedHit();
-                ShowHitMarker(MISS);
-                lane2Animation.SetBool("isMiss", true);
-                Debug.Log("Missed!");
-                HitMarkerAnimator.Play("Spawn");
-                timeElapsed = 0f;
-                hitMarkerTime = 0f;
-                canInput = false;
-                return;
-            }
+                // Checks if "input" is pressed
+                if (controls.FindAction(input).WasPressedThisFrame() && canInput && !controls.PauseMenu.Pause.WasPerformedThisFrame() && PauseMenu.IsGameResumed())
+                {
+                    CalculateScore(calculateBeat, lane3, lane3Animation);
+                    hitMarkerTime = 0f;
+                }
 
-            // Checks if "input" is pressed
-            if (controls.FindAction(input).WasPressedThisFrame() && canInput)
-            {
-                CalculateScore(calculateBeat, lane2, lane2Animation);
-                hitMarkerTime = 0f;
-            }
-
-            // Checks if wrong "input" is pressed
-            else if (controls.Any(action => action.WasPressedThisFrame() && !action.Equals(input)))
-            {
-                SetMissedHit();
-                Debug.Log("Incorrect Input!");
-                timeElapsed = 0f;
-                hitMarkerTime = 0f;
-                canInput = false;
-                ShowHitMarker(MISS);
-                lane2Animation.SetBool("isMiss", true);
-                HitMarkerAnimator.Play("Spawn");
-                StartCoroutine(WaitBeforeDestroy(lane2, lane2Animation));
-            }
-        }
-
-        // UPON LANE 3 EXIST
-        if (lane3.sprite != null)
-        {
-            float calculateBeat = 0f;
-            calculateBeat = conductor.getSongBeatPosition() - currentBeat;
-
-            if (calculateBeat >= 1.3f && canInput)
-            {
-                lane3.sprite = null;
-                input = null;
-                SetMissedHit();
-                ShowHitMarker(MISS);
-                Debug.Log("Missed!");
-                lane3Animation.SetBool("isMiss", true);
-                HitMarkerAnimator.Play("Spawn");
-                timeElapsed = 0f;
-                hitMarkerTime = 0f;
-                canInput = false;
-                return;
-            }
-
-            // Checks if "input" is pressed
-            if (controls.FindAction(input).WasPressedThisFrame() && canInput)
-            {
-                CalculateScore(calculateBeat, lane3, lane3Animation);
-                hitMarkerTime = 0f;
-            }
-
-            // Checks if wrong "input" is pressed
-            else if (controls.Any(action => action.WasPressedThisFrame() && !action.Equals(input)))
-            {
-                SetMissedHit();
-                Debug.Log("Incorrect Input!");
-                timeElapsed = 0f;
-                hitMarkerTime = 0f;
-                canInput = false;
-                ShowHitMarker(MISS);
-                lane3Animation.SetBool("isMiss", true);
-                HitMarkerAnimator.Play("Spawn");
-                StartCoroutine(WaitBeforeDestroy(lane3, lane3Animation));
+                // Checks if wrong "input" is pressed
+                else if (controls.Any(action => action.WasPressedThisFrame() && !action.Equals(input) && !controls.PauseMenu.Pause.WasPerformedThisFrame()) && PauseMenu.IsGameResumed())
+                {
+                    SetMissedHit();
+                    Debug.Log("Incorrect Input!");
+                    timeElapsed = 0f;
+                    hitMarkerTime = 0f;
+                    canInput = false;
+                    ShowHitMarker(MISS);
+                    lane3Animation.SetBool("isMiss", true);
+                    HitMarkerAnimator.Play("Spawn");
+                    StartCoroutine(WaitBeforeDestroy(lane3, lane3Animation));
+                }
             }
         }
     }
@@ -395,7 +402,7 @@ public class BeatEvent : MonoBehaviour
             HitMarker.gameObject.SetActive(true);
             HitMarkerAnimator.Play("Spawn");
 
-            // SECOND WORKING ITERATION OF THE JUDGEMENT LINE ----- TWEAKED VALUES FOR DIFFICULT BALANCING
+            // THE GRAND HOLY JUDGEMENT LINE
             if (currentBeat <= 1f && currentBeat >= 0.80f)
             {
                 SetPerfectHit();
