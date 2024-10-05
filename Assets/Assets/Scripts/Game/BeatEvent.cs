@@ -1,13 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.InputSystem;
 using System.Linq;
-using UnityEngine.VFX;
-using TMPro;
-using Autodesk.Fbx;
 
 public class BeatEvent : MonoBehaviour
 {

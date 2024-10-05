@@ -23,6 +23,8 @@ public class GameHandler : MonoBehaviour
     public Animator BackgroundAnimator;
     public Animator JudgementLine;
     public Animator TutorialText;
+
+    public VideoPlayer IntroVid;
     public VideoPlayer TutorialVid;
 
     public AudioSource tutorialSFX;
@@ -58,6 +60,8 @@ public class GameHandler : MonoBehaviour
     {
         controls = new GameplayControls();
         controls.Enable();
+
+        IntroVid.Prepare();
     }
 
     private void Start()
@@ -137,7 +141,7 @@ public class GameHandler : MonoBehaviour
             }
         }
             
-        if (tutorialIsOn == false && playingMusic == true)
+        if (tutorialIsOn == false && playingMusic == true && pauseMenu.GetCanInput())
         {
             if (controls.PauseMenu.Pause.WasPressedThisFrame() && isPaused == false)
             {

@@ -29,6 +29,7 @@ public class PauseMenu : MonoBehaviour
     public GameObject MenuSettings;
 
     private bool gameResumed = true;
+    private bool canInput = true;
 
     private void Awake()
     {
@@ -51,6 +52,7 @@ public class PauseMenu : MonoBehaviour
     public void Restart()
     {
         StartCoroutine(RestartGame());
+        Time.timeScale = 1.0f;
         DisableControls();
     }
 
@@ -65,6 +67,7 @@ public class PauseMenu : MonoBehaviour
     public void Quit()
     {
         StartCoroutine(QuitGame());
+        Time.timeScale = 1.0f;
         DisableControls();
     }
 
@@ -72,7 +75,7 @@ public class PauseMenu : MonoBehaviour
     {
         exitTransition.SetActive(true);
         exitAnimation.Play("W-B D-U");
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
@@ -80,7 +83,7 @@ public class PauseMenu : MonoBehaviour
     {
         exitTransition.SetActive(true);
         exitAnimation.Play("W-B D-U");
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
         SceneManager.LoadScene("TitleScreen");
     }
 
@@ -107,6 +110,8 @@ public class PauseMenu : MonoBehaviour
         RestartButton.enabled = false;
         SettingsButton.enabled = false;
         QuitButton.enabled = false;
+
+        canInput = false;
     }
 
     public void Back()
@@ -115,5 +120,10 @@ public class PauseMenu : MonoBehaviour
         MenuSettings.gameObject.SetActive(false);
 
         EventSystem.current.SetSelectedGameObject(ResumeButton.gameObject);
+    }
+
+    public bool GetCanInput()
+    {
+        return canInput;
     }
 }
