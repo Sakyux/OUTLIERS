@@ -9,28 +9,34 @@ public class BeatEvent : MonoBehaviour
     public SpriteRenderer lane2;
     public SpriteRenderer lane3;
 
-    public Sprite cross;
-    public Sprite square;
-    public Sprite triangle;
-    public Sprite circle;
-    public Sprite upArrow;
-    public Sprite downArrow;
-    public Sprite leftArrow;
-    public Sprite rightArrow;
-    public Sprite leftButton;
-    public Sprite rightButton;
-    public Sprite leftTrigger;
-    public Sprite rightTrigger;
+    public Sprite Cross;
+    public Sprite Square;
+    public Sprite Triangle;
+    public Sprite Circle;
+    public Sprite UpArrow;
+    public Sprite DownArrow;
+    public Sprite LeftArrow;
+    public Sprite RightArrow;
+    public Sprite LeftButton;
+    public Sprite RightButton;
+    public Sprite LeftTrigger;
+    public Sprite RightTrigger;
 
     public GameObject ComboCounter;
     public GameObject ScoreCounter;
 
     public float score = 0;
     public float combo = 0;
+    public float maxCombo = 0;
 
     public const float PerfectHit = 300f;
     public const float GoodHit = 100f;
     public const float MehHit = 50f;
+
+    private double PerfectCount = 0;
+    private double GoodCount = 0;
+    private double MehCount = 0;
+    private double MissCount = 0;
 
     public float Multiplier = 1;
 
@@ -65,7 +71,6 @@ public class BeatEvent : MonoBehaviour
     public Button ResumeButton;
 
     public PauseMenu PauseMenu;
-
     private void Awake()
     {
         controls = new GameplayControls();
@@ -79,51 +84,51 @@ public class BeatEvent : MonoBehaviour
         switch (key)
         {
             case "Cross":
-                beatSprite = cross;
+                beatSprite = Cross;
                 break;
 
             case "Square":
-                beatSprite = square;
+                beatSprite = Square;
                 break;
 
             case "Triangle":
-                beatSprite = triangle;
+                beatSprite = Triangle;
                 break;
 
             case "Circle":
-                beatSprite = circle;
+                beatSprite = Circle;
                 break;
 
             case "UpArrow":
-                beatSprite = upArrow;
+                beatSprite = UpArrow;
                 break;
 
             case "DownArrow":
-                beatSprite = downArrow;
+                beatSprite = DownArrow;
                 break;
 
             case "LeftArrow":
-                beatSprite = leftArrow;
+                beatSprite = LeftArrow;
                 break;
 
             case "RightArrow":
-                beatSprite = rightArrow;
+                beatSprite = RightArrow;
                 break;
 
             case "LeftButton":
-                beatSprite = leftButton;
+                beatSprite = LeftButton;
                 break;
 
             case "RightButton":
-                beatSprite = rightButton;
+                beatSprite = RightButton;
                 break;
 
             case "LeftTrigger":
-                beatSprite = leftTrigger;
+                beatSprite = LeftTrigger;
                 break;
 
             case "RightTrigger":
-                beatSprite = rightTrigger;
+                beatSprite = RightTrigger;
                 break;
         }
 
@@ -174,6 +179,7 @@ public class BeatEvent : MonoBehaviour
         ShowCombo();
         ShowScore();
         RoundOffScore();
+        UpdateCombo();
 
         // REMOVES HIT MARKER AFTER 3 SEC
         if (HitMarker.sprite != null)
@@ -326,6 +332,7 @@ public class BeatEvent : MonoBehaviour
                     StartCoroutine(WaitBeforeDestroy(lane3, lane3Animation));
                 }
             }
+
         }
     }
 
@@ -387,6 +394,14 @@ public class BeatEvent : MonoBehaviour
         }
     }
 
+    private void UpdateCombo()
+    {
+        if (maxCombo <= combo)
+        {
+            maxCombo = combo;
+        }
+    }
+
     private void CalculateScore(float calculateBeat, SpriteRenderer lane, Animator animator)
     {
         // Checks if "input" is pressed
@@ -406,6 +421,7 @@ public class BeatEvent : MonoBehaviour
                 animator.SetBool("isHit", true);
                 animator.SetBool("isMiss", false);
                 HitSFX.Play();
+                PerfectCount++;
                 canInput = false;
             }
 
@@ -418,6 +434,7 @@ public class BeatEvent : MonoBehaviour
                 animator.SetBool("isHit", true);
                 animator.SetBool("isMiss", false);
                 HitSFX.Play();
+                GoodCount++;
                 canInput = false;
             }
 
@@ -430,6 +447,7 @@ public class BeatEvent : MonoBehaviour
                 animator.SetBool("isHit", true);
                 animator.SetBool("isMiss", false);
                 HitSFX.Play();
+                MehCount++;
                 canInput = false;
             }
 
@@ -439,6 +457,7 @@ public class BeatEvent : MonoBehaviour
                 Debug.Log("Missed!");
                 StartCoroutine(WaitBeforeDestroy(lane, animator));
                 ShowHitMarker(MISS);
+                MissCount++;
                 animator.SetBool("isHit", false);
                 animator.SetBool("isMiss", true);
             }
@@ -455,8 +474,11 @@ public class BeatEvent : MonoBehaviour
 
     private IEnumerator WaitBeforeDestroy(SpriteRenderer lane, Animator animator)
     {
-        yield return new WaitForSeconds(0.5f);
-        lane.sprite = null;
+        if (lane != null)
+        {
+            yield return new WaitForSeconds(0.3f);
+            lane.sprite = null;
+        }
     }
 
     private void RoundOffScore()
@@ -468,5 +490,35 @@ public class BeatEvent : MonoBehaviour
     {
         HitMarker.gameObject.SetActive(true);
         HitMarker.sprite = sprite;
+    }
+
+    public float GetTotalScore()
+    {
+        return score;
+    }
+
+    public float GetMaxCombo()
+    {
+        return maxCombo;
+    }
+
+    public double GetPerfectCount()
+    {
+        return PerfectCount;
+    }
+
+    public double GetGoodCount()
+    {
+        return GoodCount;
+    }
+
+    public double GetMehCount()
+    {
+        return MehCount;
+    }
+
+    public double GetMissCount()
+    {
+        return MissCount;
     }
 }
