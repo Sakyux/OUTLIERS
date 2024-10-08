@@ -41,4 +41,9 @@ public class PauseBG : MonoBehaviour
     {
         backgroundSFX.Stop();
     }
+
+    public void DisableControls()
+    {
+        controls.Disable();
+    }
 }

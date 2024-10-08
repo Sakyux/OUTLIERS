@@ -176,9 +176,9 @@ public class BeatEvent : MonoBehaviour
 
     private void Update()
     {
+        RoundOffScore();
         ShowCombo();
         ShowScore();
-        RoundOffScore();
         UpdateCombo();
 
         // REMOVES HIT MARKER AFTER 3 SEC
@@ -220,6 +220,7 @@ public class BeatEvent : MonoBehaviour
                     HitMarkerAnimator.Play("Spawn");
                     timeElapsed = 0f;
                     hitMarkerTime = 0f;
+                    MissCount++;
                     canInput = false;
                     return;
                 }
@@ -264,6 +265,7 @@ public class BeatEvent : MonoBehaviour
                     HitMarkerAnimator.Play("Spawn");
                     timeElapsed = 0f;
                     hitMarkerTime = 0f;
+                    MissCount++;
                     canInput = false;
                     return;
                 }
@@ -308,6 +310,7 @@ public class BeatEvent : MonoBehaviour
                     timeElapsed = 0f;
                     hitMarkerTime = 0f;
                     canInput = false;
+                    MissCount++;
                     return;
                 }
 
@@ -338,12 +341,12 @@ public class BeatEvent : MonoBehaviour
 
     private void UpdateMultiplier()
     {
-        Multiplier += (combo / 100);
+        Multiplier += (1 + Mathf.Exp(combo/100));
     }
 
     private void SetPerfectHit()
     {
-        score += PerfectHit * Multiplier;
+        score += Mathf.Round(PerfectHit * Multiplier);
         combo++;
         HitMarkerAnimator.Play("Spawn");
         HitSFX.Play();
@@ -352,7 +355,7 @@ public class BeatEvent : MonoBehaviour
 
     private void SetGoodHit()
     {
-        score += GoodHit * Multiplier;
+        score += Mathf.Round(GoodHit * Multiplier);
         combo++;
         HitMarkerAnimator.Play("Spawn");
         HitSFX.Play();
@@ -361,7 +364,7 @@ public class BeatEvent : MonoBehaviour
 
     private void SetMehHit()
     {
-        score += MehHit * Multiplier;
+        score += Mathf.Round(MehHit * Multiplier);
         combo++;
         HitMarkerAnimator.Play("Spawn");
         HitSFX.Play();
@@ -520,5 +523,10 @@ public class BeatEvent : MonoBehaviour
     public double GetMissCount()
     {
         return MissCount;
+    }
+
+    public void DisableControls()
+    {
+        controls.Disable();
     }
 }

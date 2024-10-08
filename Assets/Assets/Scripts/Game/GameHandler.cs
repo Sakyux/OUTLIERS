@@ -55,6 +55,7 @@ public class GameHandler : MonoBehaviour
     public GameObject FirstButtonSelected;
 
     public PauseMenu pauseMenu;
+    public GameObject backgroundVideo;
 
     private void Awake()
     {
@@ -135,6 +136,7 @@ public class GameHandler : MonoBehaviour
                 TutorialUiIcon.SetActive(false);
 
                 SongDisplay.SetActive(true);
+                backgroundVideo.SetActive(true);
 
                 closeTutorial = true;
                 StartCoroutine(PlayPhaseTwo());
@@ -215,5 +217,15 @@ public class GameHandler : MonoBehaviour
         controls.Gameplay.Disable();
         yield return new WaitForSeconds(0.3f);
         controls.Gameplay.Enable();
+    }
+
+    public void DisableControls()
+    {
+        controls.Disable();
+    }
+
+    public void DisableBackground()
+    {
+        backgroundVideo.SetActive(false);
     }
 }

@@ -87,11 +87,13 @@ public class ResetData : MonoBehaviour
         Debug.Log("Data has been reset!");
         string audioFilePath = Application.dataPath + "/AudioConfig.txt";
         string bootFilePath = Application.dataPath + "/FirstBoot.txt";
+        string leaderboardFilePath = Application.dataPath + "/Leaderboard.txt";
 
         string defaultContent = "Master Volume: 0\nSFX Volume: 0\nMusic Volume: 0";
 
         File.WriteAllText(audioFilePath, defaultContent);
         File.WriteAllText(bootFilePath, "TRUE");
+        File.WriteAllText(leaderboardFilePath, "");
 
         audioMixer.SetFloat("Master Volume", 0);
         audioMixer.SetFloat("SFX Volume", 0);
