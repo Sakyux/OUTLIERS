@@ -14,6 +14,7 @@ public class BackgroundSway : MonoBehaviour
         initialPosition = transform.position;
     }
 
+    // Animates background via Tan function.
     void Update()
     {
         float time = Time.time;

@@ -11,6 +11,7 @@ public class CreateConfig : MonoBehaviour
         InitializeAudioConfig();
     }
 
+    // Initializes configuration if it is first launch.
     private void InitializeFirstBootConfig()
     {
         string bootFilePath = Application.dataPath + "/FirstBoot.txt";
@@ -21,7 +22,7 @@ public class CreateConfig : MonoBehaviour
             File.WriteAllText(bootFilePath, defaultContent);
         }
     }
-
+    // Initializes audio configuration upon first launch.
     private void InitializeAudioConfig()
     {
         string audioFilePath = Application.dataPath + "/AudioConfig.txt";

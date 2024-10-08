@@ -17,6 +17,7 @@ public class MainMenuBehavior : MonoBehaviour
 
     private bool allowInput = false;
 
+    // THE FOLLOWING IS ASSIGNED TO BUTTONS IN THE MAIN MENU.
     private void Start()
     {
         StartCoroutine(WaitBeforeInput(1f));
@@ -47,6 +48,7 @@ public class MainMenuBehavior : MonoBehaviour
         }
     }
 
+    // Method dedicated to the "Start Game" button that launches the gameplay.
     public IEnumerator LoadLevel()
     {
         transitionAnim.SetTrigger("OnClick");
@@ -71,6 +73,7 @@ public class MainMenuBehavior : MonoBehaviour
         SceneManager.LoadScene("Level 1 - Jam 17");
     }
 
+    // Fixes misinput issue.
     private IEnumerator WaitBeforeInput(float delay)
     {
         yield return new WaitForSeconds(delay);

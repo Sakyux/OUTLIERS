@@ -18,6 +18,7 @@ public class AudioConductor : MonoBehaviour
     // FOR PAUSE SYSTEM
     private float pauseTime = 0f;
 
+    // Enables in-game control map.
     private void Awake()
     {
         controls = new GameplayControls();
@@ -26,8 +27,8 @@ public class AudioConductor : MonoBehaviour
 
     private void Start()
     {
-        secPerBeat = 60f / bpm;
-        dspSongTime = (float)AudioSettings.dspTime; // Records the time when music starts.
+        secPerBeat = 60f / bpm; // How many seconds it takes for a beat to pass by.
+        dspSongTime = (float)AudioSettings.dspTime; // Accurately records the time when music starts.
     }
 
     private void Update()

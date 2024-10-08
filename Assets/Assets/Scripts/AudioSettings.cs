@@ -18,15 +18,18 @@ public class AudioConfig : MonoBehaviour
         LoadAudioConfig();
         SetMinimumVolume();
 
+        // Checks for value changed for volume settings.
         masterVolumeSlider.onValueChanged.AddListener(SaveAudioConfig);
         sfxVolumeSlider.onValueChanged.AddListener(SaveAudioConfig);
         musicVolumeSlider.onValueChanged.AddListener(SaveAudioConfig);
     }
 
+    // Loads audio config data from text file.
     private void LoadAudioConfig()
     {
         string audioFilePath = Application.dataPath + "/AudioConfig.txt";
 
+        // This splits the different volume mixers into 3 sections.
         if (File.Exists(audioFilePath))
         {
             string settingsText = File.ReadAllText(audioFilePath);
@@ -47,6 +50,7 @@ public class AudioConfig : MonoBehaviour
         }
     }
 
+    // Automatically saves audio config values.
     public void SaveAudioConfig(float value)
     {
         string audioFilePath = Application.dataPath + "/AudioConfig.txt";
@@ -55,6 +59,7 @@ public class AudioConfig : MonoBehaviour
         File.WriteAllText(audioFilePath, settingsText);
     }
 
+    // Mute function below -30f decibels.
     private void SetMinimumVolume()
     {
         audioMixer.GetFloat("Master Volume", out float masterVolume);

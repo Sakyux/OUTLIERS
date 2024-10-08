@@ -15,6 +15,7 @@ public class ButtonAnimation : MonoBehaviour
         originalScale = transform.localScale;
     }
 
+    // Buttons in Title Screen has hover animation.
     void Update()
     {
         // Lerp is extensively used to smooth transitioning over time.

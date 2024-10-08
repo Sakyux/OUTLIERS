@@ -11,6 +11,7 @@ public class PlayButtonSFX : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
+    // Assigned to menu buttons.
     public void PlaySelectSound()
     {
         if (audioSource != null && audioSource.clip != null)

@@ -14,6 +14,7 @@ public class FadeIn : MonoBehaviour
         StartCoroutine(FadingIn());
     }
 
+    // Fade in background for animation.
     private IEnumerator FadingIn()
     {
         float timeElapsed = 0;

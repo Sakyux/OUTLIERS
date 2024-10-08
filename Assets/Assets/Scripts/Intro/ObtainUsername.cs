@@ -15,7 +15,8 @@ public class ObtainUsername : MonoBehaviour
         Debug.Log("Windows Username: " + username);
         StartCoroutine(DisplayUser());
     }
-
+    
+    // Obtains PC username.
     private IEnumerator DisplayUser()
     {
         usernameText.text = "Welcome, " + username;

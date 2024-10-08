@@ -30,6 +30,7 @@ public class ResetData : MonoBehaviour
 
     private void Update()
     {
+        // If button is held.
         if (Input.GetButtonDown("Submit") && isSelected == true)
         {
             isHolding = true;
@@ -39,8 +40,9 @@ public class ResetData : MonoBehaviour
             
         }
 
+        // If button is let go.
         else if (Input.GetButtonUp("Submit") && isSelected == true)
-        {
+        {   
             if (isSelected == true)
             {
                 cancelSFX.Play();
@@ -52,6 +54,7 @@ public class ResetData : MonoBehaviour
             Debug.Log("Currently holding: FALSE");
         }
 
+        // Checks how long the button is held for.
         if (isHolding && isSelected == true)
         {
             currentHoldTime += Time.deltaTime;
@@ -65,6 +68,7 @@ public class ResetData : MonoBehaviour
             }
         } 
 
+        // Animation that plays when button is held.
         else if (isHolding == true && isSelected == false)
         {
             currentHoldTime = 0f;
@@ -75,6 +79,7 @@ public class ResetData : MonoBehaviour
         }
     }
 
+    // Resets hold timer if button is let go.
     private void Reset()
     {
         isHolding = false;
@@ -82,6 +87,7 @@ public class ResetData : MonoBehaviour
         cancelSFX.Play();
     }
 
+    // Method that wipes all existing data.
     public void HoldResetData()
     {
         Debug.Log("Data has been reset!");
@@ -102,6 +108,7 @@ public class ResetData : MonoBehaviour
         SceneManager.LoadScene("SplashScreen");
     }
 
+    // Plays ResetData animation.
     private void PlayDestroyAnimation()
     {
         if (animator != null)
@@ -111,6 +118,7 @@ public class ResetData : MonoBehaviour
         }
     }
 
+    // Stops ResetData animation.
     private void StopDestroyAnimation()
     {
         if (animator != null)
@@ -120,6 +128,7 @@ public class ResetData : MonoBehaviour
         }
     }
 
+    // SFX for the animation.
     private IEnumerator PlayResetSFX()
     {
         float pitch = initialPitch;
@@ -135,11 +144,13 @@ public class ResetData : MonoBehaviour
         }
     }
 
+    // Initializes SFX sequence.
     private void StartPlayingSFX()
     {
         StartCoroutine(PlayResetSFX());
     }
 
+    // Stops SFX sequence.
     private void StopPlayingSFX()
     {
         StopCoroutine(PlayResetSFX());

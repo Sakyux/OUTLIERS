@@ -20,6 +20,7 @@ public class SettingsBehavior : MonoBehaviour
         SetMusicVolume(musicVolume);
     }
 
+    // THE FOLLOWING METHODS IS ASSIGNED TO BUTTONS FOR TITLE SCREEN SETTINGS HENCE THE REPETITION.
     public void PlayClickSFX()
     {
         ClickSFX.Play();
@@ -27,7 +28,7 @@ public class SettingsBehavior : MonoBehaviour
 
     public void SetMasterVolume(float masterVolume)
     {
-        if (masterVolume <= -30)
+        if (masterVolume <= -30) // Similar to repeated code below, after -30 the sound mutes itself.
         {
             audioMixer.SetFloat("Master Volume", -80);
         } 
@@ -50,21 +51,5 @@ public class SettingsBehavior : MonoBehaviour
             audioMixer.SetFloat("Music Volume", -80);
         }
         else audioMixer.SetFloat("Music Volume", musicVolume);
-    }
-
-    private void ResetData()
-    {
-        Debug.Log("Data has been reset!");
-        string audioFilePath = Application.dataPath + "/AudioConfig.txt";
-        string bootFilePath = Application.dataPath + "/FirstBoot.txt";
-
-        string defaultContent = "Master Volume: 0\nSFX Volume: 0\nMusic Volume: 0";
-
-        File.WriteAllText(audioFilePath, defaultContent);
-        File.WriteAllText(bootFilePath, "TRUE");
-
-        audioMixer.SetFloat("Master Volume", 0);
-        audioMixer.SetFloat("SFX Volume", 0);
-        audioMixer.SetFloat("Music Volume", 0);
     }
 }

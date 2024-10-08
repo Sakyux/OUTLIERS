@@ -17,6 +17,7 @@ public class SkipIntro : MonoBehaviour
         StartCoroutine(WaitBeforeSkip(3f));
     }
 
+    // Skips intro if user desires.
     private void Update()
     {
         if (Input.GetButtonDown("Submit"))
@@ -35,6 +36,7 @@ public class SkipIntro : MonoBehaviour
         }
     }
 
+    // Animation that displays confirmation.
     private IEnumerator FadeInSkipText()
     {
         float timeElapsed = 0;

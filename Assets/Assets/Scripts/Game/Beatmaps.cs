@@ -56,6 +56,8 @@ public class Beatmaps : MonoBehaviour
 
     private void Update()
     {
+        // BLUEPRINT FOR HOW THE "NOTES" APPEAR
+        // PARAMETERS: lane number, button type, appears at...
         if (GameHandler.HasCloseTutorial() == true)
         {
             BeatEvent.Beat(2, "Cross", 8f);
@@ -126,22 +128,25 @@ public class Beatmaps : MonoBehaviour
             BeatEvent.Beat(3, "RightButton", 130f);
         }
 
+        // Function for end of beatmap.
         if (AudioConductor.getSongBeatPosition() >= 136f)
         {
-
-            JudgementLine.SetBool("Song End", true);
-            JudgementLine.SetFloat("Speed", -2);
+            JudgementLine.SetBool("Song End", true); // Set bool for animation parameter.
+            JudgementLine.SetFloat("Speed", -2); // Reverse Judgement Line animation.
             GameHandler.DisableBackground();
 
+            // DISABLES ALL CONTROLS AFTER GAMEPLAY ENDS.
             controls.Disable();
             BeatEvent.DisableControls();
             GameHandler.DisableControls();
             PauseBG.DisableControls();
 
+            // DISABLES GAMEPLAY UI AFTER GAMEPLAY ENDS.
             StartCoroutine(DisableHitMarker());
             StartCoroutine(InputUsername());
         }
 
+        // Function that triggers after animation has played.
         if (AudioConductor.getSongBeatPosition() >= 136f && endAnimation == true)
         {
             GameplayMusic.SetActive(false);
@@ -154,6 +159,7 @@ public class Beatmaps : MonoBehaviour
                 timeElapsed += Time.deltaTime;
             }
 
+            // Shows player score.
             if (!InputFieldObject.activeInHierarchy && !isFinished)
             {
                 ResultsObject.SetActive(true);
@@ -163,6 +169,7 @@ public class Beatmaps : MonoBehaviour
                     showResults = true;
                 }
 
+                // Shows leaderboard.
                 if (showResults && Input.GetButtonDown("Submit"))
                 {
                     if (File.Exists(filePath))
@@ -180,6 +187,7 @@ public class Beatmaps : MonoBehaviour
                 }
             }
 
+            // Exits game and returns to Title Screen.
             if (isFinished && Input.GetButtonDown("Submit") && timeElapsed > 1f)
             {
                 if (Input.GetButtonDown("Submit"))
@@ -192,6 +200,7 @@ public class Beatmaps : MonoBehaviour
         }
     }
 
+    // Sequence after gameplay ends.
     private IEnumerator InputUsername()
     {
         endLevel.SetActive(true);
@@ -212,6 +221,7 @@ public class Beatmaps : MonoBehaviour
         SceneManager.LoadScene("TitleScreen");
     }
 
+    // Returns string to TextMeshPro.
     public string CalculateResults() 
     {
         if (!showResults)
@@ -228,6 +238,7 @@ public class Beatmaps : MonoBehaviour
         return ResultsText.text;
     }
 
+    // Disables Hit Marker after gameplay.
     private IEnumerator DisableHitMarker()
     {
         yield return new WaitForSeconds(0.2f);

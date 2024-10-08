@@ -81,6 +81,7 @@ public class BeatEvent : MonoBehaviour
     {
         Sprite beatSprite = null;
 
+        // Defines what kind of "Note" appears as.
         switch (key)
         {
             case "Cross":
@@ -132,6 +133,7 @@ public class BeatEvent : MonoBehaviour
                 break;
         }
 
+        // Defines which lane the "Notes" appears in.
         if (beatSprite != null)
         {
             if (conductor.songPositionInBeats >= position - 0.1f && conductor.songPositionInBeats <= position + 0.1f)
@@ -176,12 +178,12 @@ public class BeatEvent : MonoBehaviour
 
     private void Update()
     {
-        RoundOffScore();
-        ShowCombo();
-        ShowScore();
-        UpdateCombo();
+        RoundOffScore(); // Rounds off the decimals in Score
+        ShowCombo(); // Displays Combo if Combo != 0.
+        ShowScore(); // Shows Score if Score != 0.
+        UpdateCombo(); // Updates Combo upon each hit or miss.
 
-        // REMOVES HIT MARKER AFTER 3 SEC
+        // REMOVES HIT MARKER AFTER 3 SEC OF INACTIVITY
         if (HitMarker.sprite != null)
         {
             hitMarkerTime += Time.deltaTime;
@@ -200,6 +202,7 @@ public class BeatEvent : MonoBehaviour
             Multiplier = 1f;
         }
 
+        // GAMEPLAY LOGIC
         if (!gameHandler.GetPaused() && controls.Gameplay.enabled)
         {
             // UPON LANE 1 EXIST
@@ -209,6 +212,7 @@ public class BeatEvent : MonoBehaviour
                 calculateBeat = conductor.getSongBeatPosition() - currentBeat;
                 // Debug.Log("Beat existing for: " + calculateBeat);
 
+                // CHECKS IF NOTES ARE TOO LATE
                 if (calculateBeat >= 1.3f && canInput)
                 {
                     lane1.sprite = null;
@@ -254,6 +258,7 @@ public class BeatEvent : MonoBehaviour
                 calculateBeat = conductor.getSongBeatPosition() - currentBeat;
                 // Debug.Log("Beat existing for: " + calculateBeat);
 
+                // CHECKS IF NOTES ARE TOO LATE
                 if (calculateBeat >= 1.3f && canInput)
                 {
                     lane2.sprite = null;
@@ -298,6 +303,7 @@ public class BeatEvent : MonoBehaviour
                 float calculateBeat = 0f;
                 calculateBeat = conductor.getSongBeatPosition() - currentBeat;
 
+                // CHECKS IF NOTES ARE TOO LATE.
                 if (calculateBeat >= 1.3f && canInput)
                 {
                     lane3.sprite = null;
@@ -339,11 +345,13 @@ public class BeatEvent : MonoBehaviour
         }
     }
 
+    // Updates score multiplier scaling off of current combo.
     private void UpdateMultiplier()
     {
         Multiplier += (1 + Mathf.Exp(combo/100));
     }
 
+    // Upon "Perfect" hit
     private void SetPerfectHit()
     {
         score += Mathf.Round(PerfectHit * Multiplier);
@@ -353,6 +361,7 @@ public class BeatEvent : MonoBehaviour
         UpdateMultiplier();
     }
 
+    // Upon "Good" hit
     private void SetGoodHit()
     {
         score += Mathf.Round(GoodHit * Multiplier);
@@ -362,6 +371,7 @@ public class BeatEvent : MonoBehaviour
         UpdateMultiplier();
     }
 
+    // Upon "Meh" hit
     private void SetMehHit()
     {
         score += Mathf.Round(MehHit * Multiplier);
@@ -371,6 +381,7 @@ public class BeatEvent : MonoBehaviour
         UpdateMultiplier();
     }
 
+    // Upon miss; resets combo.
     private void SetMissedHit()
     {
         if (combo > 5)
@@ -384,6 +395,7 @@ public class BeatEvent : MonoBehaviour
         HitMarkerAnimator.Play("Spawn");
     }
 
+    // Shows Combo if Combo != 0.
     private void ShowCombo()
     {
         if (combo > 0 )
@@ -397,6 +409,7 @@ public class BeatEvent : MonoBehaviour
         }
     }
 
+    // Updates value of maximum combo achieved.
     private void UpdateCombo()
     {
         if (maxCombo <= combo)
@@ -405,6 +418,7 @@ public class BeatEvent : MonoBehaviour
         }
     }
 
+    // SCORE CALCULATION LOGIC
     private void CalculateScore(float calculateBeat, SpriteRenderer lane, Animator animator)
     {
         // Checks if "input" is pressed
@@ -467,6 +481,7 @@ public class BeatEvent : MonoBehaviour
         }
     }
 
+    // Displays Score if Score != 0.
     private void ShowScore()
     {
         if (score > 0)
@@ -475,6 +490,7 @@ public class BeatEvent : MonoBehaviour
         }
     }
 
+    // Delay before notes are destroyed after hit or miss.
     private IEnumerator WaitBeforeDestroy(SpriteRenderer lane, Animator animator)
     {
         if (lane != null)
@@ -484,11 +500,13 @@ public class BeatEvent : MonoBehaviour
         }
     }
 
+    // Rounds off decimals of Score.
     private void RoundOffScore()
     {
         score = Mathf.Round(score);
     }
 
+    // Displays hit marker, such as "Perfect", "Good", "Meh" or "Miss"
     private void ShowHitMarker(Sprite sprite)
     {
         HitMarker.gameObject.SetActive(true);
@@ -525,6 +543,7 @@ public class BeatEvent : MonoBehaviour
         return MissCount;
     }
 
+    // Method to disable input.
     public void DisableControls()
     {
         controls.Disable();

@@ -70,6 +70,7 @@ public class BootSequence : MonoBehaviour
         else StartCoroutine(SplashScreen());
     }
 
+    // Animation for loading UI.
     private IEnumerator LoadingUI()
     {
         BGAudio = GetComponent<AudioSource>();
@@ -80,6 +81,7 @@ public class BootSequence : MonoBehaviour
         LoadingGIF.SetActive(false);
     }
 
+    // Animation upon first boot.
     private IEnumerator FirstStartUp()
     {
         StartCoroutine(SFXDuration());
@@ -229,6 +231,7 @@ public class BootSequence : MonoBehaviour
         SceneManager.LoadScene("TitleScreen");
     }
 
+    // Normal splash animation.
     private IEnumerator SplashScreen() 
     {
         StartCoroutine(SFXDuration());
@@ -285,6 +288,7 @@ public class BootSequence : MonoBehaviour
         SceneManager.LoadScene("TitleScreen");
     }
 
+    // Fades out audio when entry into Title Screen.
     private IEnumerator FadeOutAudio(AudioSource audioSource, float fadeTime)
     {
         float startVolume = audioSource.volume;
@@ -299,6 +303,7 @@ public class BootSequence : MonoBehaviour
         audioSource.volume = startVolume;
     }
 
+    // Duration of SFXs
     private IEnumerator SFXDuration()
     {
         if (firstBoot == true)
@@ -313,6 +318,7 @@ public class BootSequence : MonoBehaviour
         }
     }
 
+    // Grabs IP Address of computer.
     private string GetLocalIPAddress()
     {
         string localIP = "";

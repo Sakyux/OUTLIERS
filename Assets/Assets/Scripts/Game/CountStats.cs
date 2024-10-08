@@ -9,6 +9,7 @@ public class CountStats : MonoBehaviour
     public TextMeshProUGUI ComboText;
     public TextMeshProUGUI ScoreText;
 
+    // ACTIVELY UPDATES STATS DURING GAMEPLAY
     void Update()
     {
         ComboText.text = "COMBO: " + BeatEvent.combo;

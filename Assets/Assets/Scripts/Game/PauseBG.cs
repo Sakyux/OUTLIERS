@@ -14,6 +14,7 @@ public class PauseBG : MonoBehaviour
 
     public Animator animator;
 
+    // Activate controls.
     private void Awake()
     {
         controls = new GameplayControls();
@@ -22,6 +23,7 @@ public class PauseBG : MonoBehaviour
         animator.updateMode = AnimatorUpdateMode.UnscaledTime;
     }
 
+    // ACTIVATES PAUSE MENU UI
     void Update()
     {
         if (controls.PauseMenu.Pause.WasPressedThisFrame() && background.activeInHierarchy && gameHandler.HasCloseTutorial())

@@ -12,12 +12,14 @@ public class MenuHandler : MonoBehaviour
     public Slider FirstSliderSelected;
     public Button FirstButtonSelected;
 
+    // Deactivates Main Menu and activates Settings Menu.
     public void EnterSettingsUI()
     {
         MainMenu.SetActive(false);
         SettingsMenu.SetActive(true);
     }
 
+    // Selects Settings slider UI.
     public void SelectFirstSlider()
     {
         if (FirstSliderSelected != null && EventSystem.current != null)
@@ -26,6 +28,7 @@ public class MenuHandler : MonoBehaviour
         }
     }
 
+    // Selects Main Menu button UI.
     public void SelectFirstButton()
     {
         if (FirstButtonSelected != null && EventSystem.current != null)
@@ -34,6 +37,7 @@ public class MenuHandler : MonoBehaviour
         }
     }
 
+    // Reactivates Main Menu and deactivates Settings Menu.
     public void ExitSettingsUI()
     {
         SettingsMenu.SetActive(false);

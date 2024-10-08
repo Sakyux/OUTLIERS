@@ -36,9 +36,10 @@ public class PauseMenu : MonoBehaviour
         controls = new GameplayControls();
         controls.PauseMenu.Enable();
 
-        exitAnimation.updateMode = AnimatorUpdateMode.UnscaledTime;
+        exitAnimation.updateMode = AnimatorUpdateMode.UnscaledTime; // To fix animation freeze bug.
     }
 
+    // The following are methods to be attached to buttons in game.
     public void Resume()
     {
         StartCoroutine(GameplayDelay());
@@ -71,6 +72,7 @@ public class PauseMenu : MonoBehaviour
         DisableControls();
     }
 
+    // Sequence that restarts the game.
     private IEnumerator RestartGame()
     {
         exitTransition.SetActive(true);
@@ -79,6 +81,7 @@ public class PauseMenu : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
+    // Quite literally exits the gameplay.
     private IEnumerator QuitGame()
     {
         exitTransition.SetActive(true);
@@ -87,7 +90,7 @@ public class PauseMenu : MonoBehaviour
         SceneManager.LoadScene("TitleScreen");
     }
 
-
+    // Fixes a bug that causes sudden input when resuming game.
     public IEnumerator GameplayDelay()
     {
         yield return new WaitForSeconds(0.1f);
@@ -104,6 +107,7 @@ public class PauseMenu : MonoBehaviour
         return gameResumed; 
     }
 
+    // Disable Pause Menu buttons.
     public void DisableControls()
     {
         ResumeButton.enabled = false;
@@ -114,6 +118,7 @@ public class PauseMenu : MonoBehaviour
         canInput = false;
     }
 
+    // To go back from Settings to Pause Menu.
     public void Back()
     {
         MenuPause.gameObject.SetActive(true);

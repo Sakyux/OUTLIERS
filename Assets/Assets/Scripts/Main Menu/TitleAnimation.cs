@@ -15,6 +15,7 @@ public class TitleAnimation : MonoBehaviour
         originalScale = transform.localScale;
     }
 
+    // Animation for the Title of the game in Title Screen.
     void Update()
     {
         // Lerp is extensively used to smooth transitioning over time.

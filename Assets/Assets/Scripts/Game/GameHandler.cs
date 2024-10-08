@@ -57,12 +57,13 @@ public class GameHandler : MonoBehaviour
     public PauseMenu pauseMenu;
     public GameObject backgroundVideo;
 
+    // Activate controls.
     private void Awake()
     {
         controls = new GameplayControls();
         controls.Enable();
 
-        IntroVid.Prepare();
+        IntroVid.Prepare(); // Preloads video to fix stutters.
     }
 
     private void Start()
@@ -71,6 +72,7 @@ public class GameHandler : MonoBehaviour
         StartCoroutine(PreloadPhaseTwo());
     }
 
+    // Delay between intro and gameplay.
     private IEnumerator StartDelay()
     {
         IntroVideo.SetActive(true);
@@ -82,6 +84,7 @@ public class GameHandler : MonoBehaviour
         StartCoroutine(PlayMusic());
     }
 
+    // Method to play game music.
     private IEnumerator PlayMusic()
     {
         yield return new WaitForSeconds(3.5f);
@@ -90,6 +93,7 @@ public class GameHandler : MonoBehaviour
         yield return null;
     }
 
+    // Animation to open and play tutorial video.
     private IEnumerator OpenTutorial()
     {
         Tutorial.SetActive(true);
@@ -111,6 +115,7 @@ public class GameHandler : MonoBehaviour
 
     private void Update()
     {
+        // Transition between tutorial and gameplay.
         if (tutorialIsOn == true)
         {
             if (Input.GetButtonDown("Submit"))
@@ -158,6 +163,7 @@ public class GameHandler : MonoBehaviour
         }
     }
 
+    // Starts AudioConductor which tracks beats and song duration.
     private IEnumerator PlayPhaseTwo()
     {
         GameMusic2.Play();
@@ -167,6 +173,7 @@ public class GameHandler : MonoBehaviour
         yield return null;
     }
 
+    // Preloads audio clip.
     private IEnumerator PreloadPhaseTwo()
     {
         GameMusic2.clip.LoadAudioData();
@@ -182,6 +189,7 @@ public class GameHandler : MonoBehaviour
         return closeTutorial;
     }
 
+    // Freezes the game and deactivating gameplay input.
     public void Pause()
     {
         Time.timeScale = 0f;
@@ -194,9 +202,10 @@ public class GameHandler : MonoBehaviour
 
         pauseMenu.SetGameResumed(false);
 
-        EventSystem.current.SetSelectedGameObject(FirstButtonSelected.gameObject);
+        EventSystem.current.SetSelectedGameObject(FirstButtonSelected.gameObject); // Selects Pause Menu UI.
     }
 
+    // Unfreezes the game and reactivates gameplay input.
     public void Resume()
     {
         Time.timeScale = 1f;
@@ -212,6 +221,7 @@ public class GameHandler : MonoBehaviour
         return isPaused;
     }
 
+    // Delay before gameplay starts.
     public IEnumerator GameplayDelay()
     {
         controls.Gameplay.Disable();

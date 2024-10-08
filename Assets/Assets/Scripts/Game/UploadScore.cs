@@ -34,20 +34,22 @@ public class UploadScore : MonoBehaviour
     void Start()
     {
         inputField = GetComponent<TMP_InputField>();
-        filePath = Path.Combine(Application.dataPath, "Leaderboard.txt");
+        filePath = Path.Combine(Application.dataPath, "Leaderboard.txt"); // Instantiates file path for Leaderboard.txt
 
         if (!File.Exists(filePath))
         {
-            File.WriteAllText(filePath, "");
+            File.WriteAllText(filePath, ""); // Creates Leaderboard.txt if doesn't exist.
         }
     }
 
+    // Assigned to input panel that tracks text.
     public void OnTextChanged(string newText)
     {
         Debug.Log("Text changed to: " + newText);
         username = newText;
     }
 
+    // Assigned to input panel when text is saved.
     public void SaveToFile(string text)
     {
         DateTime dateTime = DateTime.Now;
@@ -61,7 +63,7 @@ public class UploadScore : MonoBehaviour
                 string[] lines = File.ReadAllLines(filePath);
                 foreach (string line in lines)
                 {
-                    string[] parts = line.Split('\t');
+                    string[] parts = line.Split('\t'); // Splits data into: username, score, date.
                     if (parts.Length == 3)
                     {
                         entries.Add(new ScoreEntry
@@ -98,6 +100,7 @@ public class UploadScore : MonoBehaviour
         }
     }
 
+    // Closes input panel after entry.
     public void CloseInputPanel()
     {
         inputField.enabled = false;
