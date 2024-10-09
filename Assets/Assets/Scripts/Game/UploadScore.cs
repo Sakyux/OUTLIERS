@@ -84,7 +84,7 @@ public class UploadScore : MonoBehaviour
                 Timestamp = DateTime.Now
             });
 
-            // My sorting system via date in descending order
+            // My sorting system via date in descending order and limit to 10.
             entries = entries.OrderByDescending(e => e.Timestamp)
                             .Take(MaxEntries)
                             .ToList();

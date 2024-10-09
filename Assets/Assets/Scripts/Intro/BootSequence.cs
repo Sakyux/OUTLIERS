@@ -255,10 +255,11 @@ public class BootSequence : MonoBehaviour
             
             float ImageAlpha = Mathf.Lerp(0, targetAlpha, t);
             Color ImageColor = new Color(CreditsImage.color.r, CreditsImage.color.g, CreditsImage.color.b, ImageAlpha);
+            Color CreditsTextColor = new Color(CreditsText.color.r, CreditsText.color.g, CreditsText.color.b, ImageAlpha);
             Color UserTextColor = new Color(UserText.color.r, UserText.color.g, UserText.color.b, ImageAlpha);
 
-            CreditsImage.color = ImageColor; 
-            CreditsText.color = ImageColor;
+            CreditsImage.color = ImageColor;
+            CreditsText.color = CreditsTextColor;
             UserText.color = UserTextColor;
 
             yield return null;
@@ -276,9 +277,11 @@ public class BootSequence : MonoBehaviour
 
             float ImageAlpha = Mathf.Lerp(1, 0, t);
             Color ImageColor = new Color(CreditsImage.color.r, CreditsImage.color.g, CreditsImage.color.b, ImageAlpha);
+            Color CreditsTextColor = new Color(CreditsText.color.r, CreditsText.color.g, CreditsText.color.b, ImageAlpha);
             Color UserTextColor = new Color(UserText.color.r, UserText.color.g, UserText.color.b, ImageAlpha);
 
             CreditsText.color = ImageColor;
+            CreditsText.color = CreditsTextColor;
             UserText.color = UserTextColor;
 
             yield return null;

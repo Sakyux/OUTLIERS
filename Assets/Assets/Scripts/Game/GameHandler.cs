@@ -56,6 +56,7 @@ public class GameHandler : MonoBehaviour
 
     public PauseMenu pauseMenu;
     public GameObject backgroundVideo;
+    public VideoPlayer backgroundVideoPlayer;
 
     // Activate controls.
     private void Awake()
@@ -169,6 +170,7 @@ public class GameHandler : MonoBehaviour
         GameMusic2.Play();
         Debug.Log("Play Phase Two");
 
+        backgroundVideo.SetActive(true);
         AudioConductor.SetActive(true);
         yield return null;
     }
@@ -199,6 +201,7 @@ public class GameHandler : MonoBehaviour
         PauseBG.SetActive(true);
         PauseMenu.SetActive(true);
         isPaused = true;
+        backgroundVideoPlayer.Pause();
 
         pauseMenu.SetGameResumed(false);
 
@@ -214,6 +217,7 @@ public class GameHandler : MonoBehaviour
         PauseBG.SetActive(false);
         PauseMenu.SetActive(false);
         isPaused = false;
+        backgroundVideoPlayer.Play();
     }
 
     public bool GetPaused()

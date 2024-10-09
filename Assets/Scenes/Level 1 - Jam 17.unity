@@ -539,6 +539,7 @@ MonoBehaviour:
   FirstButtonSelected: {fileID: 1326341888}
   pauseMenu: {fileID: 1326582798}
   backgroundVideo: {fileID: 1203698033}
+  backgroundVideoPlayer: {fileID: 1203698035}
 --- !u!82 &28930947
 AudioSource:
   m_ObjectHideFlags: 0
@@ -8031,7 +8032,7 @@ RectTransform:
   m_GameObject: {fileID: 1203698033}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.0125, y: 1.296875, z: 1}
+  m_LocalScale: {x: 1.0767305, y: 1.296875, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -9392,7 +9393,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!224 &1355931167
 RectTransform:
